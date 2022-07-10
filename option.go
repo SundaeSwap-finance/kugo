@@ -16,10 +16,12 @@
 
 package kugo
 
+import "github.com/SundaeSwap-finance/ogmigo"
+
 // Options available to kugo client
 type Options struct {
 	endpoint string
-	logger   Logger
+	logger   ogmigo.Logger
 }
 
 // Option to kugo client
@@ -33,7 +35,7 @@ func WithEndpoint(endpoint string) Option {
 }
 
 // WithLogger allows custom logger to be specified
-func WithLogger(logger Logger) Option {
+func WithLogger(logger ogmigo.Logger) Option {
 	return func(opts *Options) {
 		opts.logger = logger
 	}
@@ -48,7 +50,7 @@ func buildOptions(opts ...Option) Options {
 		options.endpoint = "http://127.0.0.1:1442"
 	}
 	if options.logger == nil {
-		options.logger = DefaultLogger
+		options.logger = ogmigo.DefaultLogger
 	}
 	return options
 }

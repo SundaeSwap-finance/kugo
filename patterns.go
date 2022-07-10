@@ -23,6 +23,8 @@ import (
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/SundaeSwap-finance/ogmigo"
 )
 
 func (c *Client) Patterns(ctx context.Context) (matches []string, err error) {
@@ -33,9 +35,9 @@ func (c *Client) Patterns(ctx context.Context) (matches []string, err error) {
 			errStr = err.Error()
 		}
 		c.options.logger.Info("Patterns() finished",
-			KV("duration", time.Since(start).Round(time.Millisecond).String()),
-			KV("matched", fmt.Sprintf("%v", len(matches))),
-			KV("err", errStr),
+			ogmigo.KV("duration", time.Since(start).Round(time.Millisecond).String()),
+			ogmigo.KV("matched", fmt.Sprintf("%v", len(matches))),
+			ogmigo.KV("err", errStr),
 		)
 	}()
 

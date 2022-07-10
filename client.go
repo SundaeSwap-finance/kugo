@@ -16,15 +16,17 @@
 
 package kugo
 
+import "github.com/SundaeSwap-finance/ogmigo"
+
 type Client struct {
-	logger  Logger
+	logger  ogmigo.Logger
 	options Options
 }
 
 // New returns a new Client
 func New(opts ...Option) *Client {
 	options := buildOptions(opts...)
-	logger := options.logger.With(KV("service", "kugo"))
+	logger := options.logger.With(ogmigo.KV("service", "kugo"))
 
 	return &Client{
 		logger:  logger,

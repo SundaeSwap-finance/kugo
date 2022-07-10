@@ -25,6 +25,7 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/SundaeSwap-finance/ogmigo"
 	"github.com/SundaeSwap-finance/ogmigo/ouroboros/chainsync"
 )
 
@@ -69,9 +70,9 @@ func (c *Client) Matches(ctx context.Context, filters ...Filter) (matches []Matc
 			errStr = err.Error()
 		}
 		c.options.logger.Info("Matches() finished",
-			KV("duration", time.Since(start).Round(time.Millisecond).String()),
-			KV("matched", fmt.Sprintf("%v", len(matches))),
-			KV("err", errStr),
+			ogmigo.KV("duration", time.Since(start).Round(time.Millisecond).String()),
+			ogmigo.KV("matched", fmt.Sprintf("%v", len(matches))),
+			ogmigo.KV("err", errStr),
 		)
 	}()
 
@@ -87,7 +88,7 @@ func (c *Client) Matches(ctx context.Context, filters ...Filter) (matches []Matc
 	}
 	o.apply(url)
 
-	c.logger.Debug("finding matches", KV("url", url.String()))
+	c.logger.Debug("finding matches", ogmigo.KV("url", url.String()))
 
 	req, err := http.NewRequest("GET", url.String(), nil)
 	if err != nil {
