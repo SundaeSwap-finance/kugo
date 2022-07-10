@@ -18,23 +18,49 @@ package kugo
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
-	"testing"
-
-	"github.com/SundaeSwap-finance/ogmigo/ouroboros/chainsync"
-	"github.com/tj/assert"
+	"io"
+	"net/http"
+	"time"
 )
 
-func Test_Matches(t *testing.T) {
-	t.SkipNow()
-	c := New(WithEndpoint("http://localhost:1442"))
-	matches, err := c.Matches(context.Background(),
-		OnlyUnspent(),
-		AssetID(chainsync.AssetID("4fc16c94d066e949e771c5581235f8090ad6aaffaf373a426445ca51.73636f6f70209a0a")),
-		Pattern("addr_test1qpluezahtqdtwg4f7qewdvjvz806hsatqwr4u04yzcrk2m7pucvj7jyhq97rca9m0wul2fu3qnsayxvqdwlda8wngurqgyfepe"),
-	)
-	assert.Nil(t, err)
-	assert.NotZero(t, len(matches))
+func (c *Client) Patterns(ctx context.Context) (matches []string, err error) {
+	start := time.Now()
+	defer func() {
+		errStr := ""
+		if err != nil {
+			errStr = err.Error()
+		}
+		c.options.logger.Info("Patterns() finished",
+			KV("duration", time.Since(start).Round(time.Millisecond).String()),
+			KV("matched", fmt.Sprintf("%v", len(matches))),
+			KV("err", errStr),
+		)
+	}()
 
-	fmt.Printf("Matches: %v\n", len(matches))
+	req, err := http.NewRequest("GET", fmt.Sprintf("%v/v1/patterns", c.options.endpoint), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to build request: %w", err)
+	}
+
+	req = req.WithContext(ctx)
+
+	client := http.DefaultClient
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to retrieve patterns: %w", err)
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error reading response body: %w", err)
+	}
+
+	matches = []string{}
+	if err := json.Unmarshal(body, &matches); err != nil {
+		return nil, fmt.Errorf("error parsing response %v: %w", string(body), err)
+	}
+	return matches, nil
 }

@@ -21,20 +21,16 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/SundaeSwap-finance/ogmigo/ouroboros/chainsync"
 	"github.com/tj/assert"
 )
 
-func Test_Matches(t *testing.T) {
+func Test_Patterns(t *testing.T) {
 	t.SkipNow()
 	c := New(WithEndpoint("http://localhost:1442"))
-	matches, err := c.Matches(context.Background(),
-		OnlyUnspent(),
-		AssetID(chainsync.AssetID("4fc16c94d066e949e771c5581235f8090ad6aaffaf373a426445ca51.73636f6f70209a0a")),
-		Pattern("addr_test1qpluezahtqdtwg4f7qewdvjvz806hsatqwr4u04yzcrk2m7pucvj7jyhq97rca9m0wul2fu3qnsayxvqdwlda8wngurqgyfepe"),
-	)
+	matches, err := c.Patterns(context.Background())
 	assert.Nil(t, err)
 	assert.NotZero(t, len(matches))
 
-	fmt.Printf("Matches: %v\n", len(matches))
+	fmt.Printf("Matches: %v\n", matches)
+	assert.Fail(t, "")
 }
