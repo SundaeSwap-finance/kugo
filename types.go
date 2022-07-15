@@ -23,7 +23,7 @@ type Match struct {
 	OutputIndex   int    `json:"output_index,omitempty"`
 	Address       string `json:"address,omitempty"`
 	DatumHash     string `json:"datum_hash,omitempty"`
-	Value         string `json:"value,omitempty"`
+	Value         Value  `json:"value,omitempty"`
 	CreatedAt     Point  `json:"created_at,omitempty"`
 	SpentAt       Point  `json:"spent_at,omitempty"`
 }
