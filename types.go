@@ -19,18 +19,13 @@ package kugo
 import "github.com/SundaeSwap-finance/ogmigo/ouroboros/chainsync"
 
 type Match struct {
-	TransactionID string `json:"transaction_id,omitempty"`
-	OutputIndex   int    `json:"output_index,omitempty"`
-	Address       string `json:"address,omitempty"`
-	DatumHash     string `json:"datum_hash,omitempty"`
-	Value         Value  `json:"value,omitempty"`
-	CreatedAt     Point  `json:"created_at,omitempty"`
-	SpentAt       Point  `json:"spent_at,omitempty"`
-}
-
-type Value struct {
-	Coins  uint64                       `json:"coins,omitempty"`
-	Assets map[chainsync.AssetID]uint64 `json:"assets,omitempty"`
+	TransactionID string          `json:"transaction_id,omitempty"`
+	OutputIndex   int             `json:"output_index,omitempty"`
+	Address       string          `json:"address,omitempty"`
+	DatumHash     string          `json:"datum_hash,omitempty"`
+	Value         chainsync.Value `json:"value,omitempty"`
+	CreatedAt     Point           `json:"created_at,omitempty"`
+	SpentAt       Point           `json:"spent_at,omitempty"`
 }
 
 type Point struct {
