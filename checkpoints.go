@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/SundaeSwap-finance/ogmigo"
@@ -44,8 +45,13 @@ func (c *Client) CheckpointBySlot(ctx context.Context, input CheckpointBySlotInp
 		)
 	}()
 
-	url := fmt.Sprintf("%v/v1/checkpoints/%v", c.options.endpoint, input.SlotNo)
-	req, err := http.NewRequest("GET", url, nil)
+	endpoint, err := url.Parse(c.options.endpoint)
+	if err != nil {
+		return Point{}, err
+	}
+
+	endpoint.Path = fmt.Sprintf("/v1/checkpoints/%v", input.SlotNo)
+	req, err := http.NewRequest("GET", endpoint.String(), nil)
 	if err != nil {
 		return Point{}, fmt.Errorf("failed to build request: %w", err)
 	}
@@ -58,10 +64,13 @@ func (c *Client) CheckpointBySlot(ctx context.Context, input CheckpointBySlotInp
 		return Point{}, fmt.Errorf("failed to retrieve checkpoint by slot: %w", err)
 	}
 	defer resp.Body.Close()
-
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return Point{}, fmt.Errorf("error reading response body: %w", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return Point{}, fmt.Errorf("got unexpected response: %v: %v", resp.StatusCode, string(body))
 	}
 
 	if err := json.Unmarshal(body, &point); err != nil {
