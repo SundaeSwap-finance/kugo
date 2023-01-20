@@ -19,6 +19,7 @@ package kugo
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"testing"
 
 	"github.com/SundaeSwap-finance/ogmigo/ouroboros/chainsync"
@@ -37,4 +38,66 @@ func Test_Matches(t *testing.T) {
 	assert.NotZero(t, len(matches))
 
 	fmt.Printf("Matches: %v\n", len(matches))
+}
+
+func Test_Options(t *testing.T) {
+	type testCase struct {
+		label    string
+		options  []Filter
+		expected string
+	}
+
+	base := "http://localhost:1442"
+	testCases := []testCase{
+		{
+			label:    "none",
+			options:  []Filter{},
+			expected: base + "",
+		},
+		{
+			label:    "spent",
+			options:  []Filter{OnlySpent()},
+			expected: base + "?spent",
+		},
+		{
+			label:    "unspent",
+			options:  []Filter{OnlyUnspent()},
+			expected: base + "?unspent",
+		},
+		{
+			label:    "overlapping",
+			options:  []Filter{Overlapping(123)},
+			expected: base + "?created_before=123&spent_after=123",
+		},
+		{
+			label:    "policy",
+			options:  []Filter{PolicyID("abc")},
+			expected: base + "?policy_id=abc",
+		},
+		{
+			label:    "assetId",
+			options:  []Filter{AssetID("abc.xyz")},
+			expected: base + "?policy_id=abc&asset_name=xyz",
+		},
+		{
+			label:    "pattern",
+			options:  []Filter{Pattern("www")},
+			expected: base + "/www",
+		},
+		{
+			label:    "mixed",
+			options:  []Filter{Overlapping(123), AssetID("abc.xyz"), Pattern("www")},
+			expected: base + "/www?created_before=123&spent_after=123&policy_id=abc&asset_name=xyz",
+		},
+	}
+	for _, tc := range testCases {
+		reqUrl, err := url.Parse(base)
+		assert.Nil(t, err)
+		opts := options{}
+		for _, o := range tc.options {
+			o(&opts)
+		}
+		opts.apply(reqUrl)
+		assert.Equal(t, tc.expected, reqUrl.String(), tc.label)
+	}
 }

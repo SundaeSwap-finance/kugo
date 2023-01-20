@@ -35,6 +35,11 @@ type options struct {
 	pattern   string
 	policyId  string
 	assetName string
+	// Pagination properties
+	created_before uint64
+	spent_before   uint64
+	created_after  uint64
+	spent_after    uint64
 }
 
 func (o options) apply(url *url.URL) {
@@ -43,6 +48,31 @@ func (o options) apply(url *url.URL) {
 		qs += "spent"
 	} else if o.unspent && !o.spent {
 		qs += "unspent"
+	}
+
+	if o.created_before != 0 {
+		if qs != "" {
+			qs += "&"
+		}
+		qs += fmt.Sprintf("created_before=%v", o.created_before)
+	}
+	if o.created_after != 0 {
+		if qs != "" {
+			qs += "&"
+		}
+		qs += fmt.Sprintf("created_after=%v", o.created_after)
+	}
+	if o.spent_before != 0 {
+		if qs != "" {
+			qs += "&"
+		}
+		qs += fmt.Sprintf("spent_before=%v", o.spent_before)
+	}
+	if o.spent_after != 0 {
+		if qs != "" {
+			qs += "&"
+		}
+		qs += fmt.Sprintf("spent_after=%v", o.spent_after)
 	}
 
 	if o.policyId != "" {
@@ -152,5 +182,33 @@ func AssetID(assetID chainsync.AssetID) Filter {
 	return func(o *options) {
 		o.policyId = assetID.PolicyID()
 		o.assetName = assetID.AssetName()
+	}
+}
+
+func Overlapping(slot uint64) Filter {
+	return func(o *options) {
+		o.created_before = slot
+		o.spent_after = slot
+	}
+}
+
+func CreatedBefore(slot uint64) Filter {
+	return func(o *options) {
+		o.created_before = slot
+	}
+}
+func CreatedAfter(slot uint64) Filter {
+	return func(o *options) {
+		o.created_after = slot
+	}
+}
+func SpentBefore(slot uint64) Filter {
+	return func(o *options) {
+		o.spent_before = slot
+	}
+}
+func SpentAfter(slot uint64) Filter {
+	return func(o *options) {
+		o.spent_after = slot
 	}
 }
