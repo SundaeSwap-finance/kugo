@@ -25,6 +25,7 @@ import (
 )
 
 func Test_Patterns(t *testing.T) {
+	// Integration test that relies on a local instance of kupo, so skip for now
 	t.SkipNow()
 	c := New(WithEndpoint("http://localhost:1442"))
 	matches, err := c.Patterns(context.Background())

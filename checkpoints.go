@@ -28,18 +28,30 @@ import (
 	"github.com/SundaeSwap-finance/ogmigo"
 )
 
-type CheckpointBySlotInput struct {
-	SlotNo int
+type checkpointsOptions struct {
+	singular bool
+	slot     uint64
 }
 
-func (c *Client) CheckpointBySlot(ctx context.Context, input CheckpointBySlotInput) (point Point, err error) {
+func (c checkpointsOptions) apply(url *url.URL) {
+	if c.slot != 0 {
+		url.Path += fmt.Sprintf("/%v", c.slot)
+	}
+}
+
+type CheckpointsFilter struct {
+	before func(*checkpointsOptions)
+	after  func(points []Point) []Point
+}
+
+func (c *Client) Checkpoints(ctx context.Context, filters ...CheckpointsFilter) (points []Point, err error) {
 	start := time.Now()
 	defer func() {
 		errStr := ""
 		if err != nil {
 			errStr = err.Error()
 		}
-		c.options.logger.Info("CheckpointBySlot() finished",
+		c.options.logger.Info("Checkpoints() finished",
 			ogmigo.KV("duration", time.Since(start).Round(time.Millisecond).String()),
 			ogmigo.KV("err", errStr),
 		)
@@ -47,13 +59,22 @@ func (c *Client) CheckpointBySlot(ctx context.Context, input CheckpointBySlotInp
 
 	endpoint, err := url.Parse(c.options.endpoint)
 	if err != nil {
-		return Point{}, err
+		return nil, fmt.Errorf("unable to parse endpoint ")
 	}
 
-	endpoint.Path = fmt.Sprintf("/v1/checkpoints/%v", input.SlotNo)
+	endpoint.Path = "/v1/checkpoints"
+
+	o := checkpointsOptions{}
+	for _, f := range filters {
+		if f.before != nil {
+			f.before(&o)
+		}
+	}
+	o.apply(endpoint)
+
 	req, err := http.NewRequest("GET", endpoint.String(), nil)
 	if err != nil {
-		return Point{}, fmt.Errorf("failed to build request: %w", err)
+		return nil, fmt.Errorf("failed to build request: %w", err)
 	}
 
 	req = req.WithContext(ctx)
@@ -61,21 +82,62 @@ func (c *Client) CheckpointBySlot(ctx context.Context, input CheckpointBySlotInp
 	client := http.DefaultClient
 	resp, err := client.Do(req)
 	if err != nil {
-		return Point{}, fmt.Errorf("failed to retrieve checkpoint by slot: %w", err)
+		return nil, fmt.Errorf("failed to retrieve checkpoint by slot: %w", err)
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return Point{}, fmt.Errorf("error reading response body: %w", err)
+		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return Point{}, fmt.Errorf("got unexpected response: %v: %v", resp.StatusCode, string(body))
+		return nil, fmt.Errorf("got unexpected response: %v: %v", resp.StatusCode, string(body))
 	}
 
-	if err := json.Unmarshal(body, &point); err != nil {
-		return Point{}, fmt.Errorf("error parsing response %v: %w", string(body), err)
+	if o.singular {
+		var point Point
+		if err := json.Unmarshal(body, &point); err != nil {
+			return nil, fmt.Errorf("error parsing response %v: %w", string(body), err)
+		}
+		points = []Point{point}
+	} else {
+		if err := json.Unmarshal(body, &points); err != nil {
+			return nil, fmt.Errorf("error parsing response %v: %w", string(body), err)
+		}
+	}
+	for _, f := range filters {
+		if f.after != nil {
+			points = f.after(points)
+		}
 	}
 
-	return point, nil
+	return points, nil
+}
+
+// Return a recent sampling of kupo checkpoints
+// NOTE: equivalent to providing no filters, but useful for documenting your purpose
+func Recent() CheckpointsFilter {
+	return CheckpointsFilter{
+		before: nil,
+		after:  nil,
+	}
+}
+
+func Latest() CheckpointsFilter {
+	return CheckpointsFilter{
+		before: nil,
+		after: func(points []Point) []Point {
+			return []Point{points[0]}
+		},
+	}
+}
+
+func BySlot(slot uint64) CheckpointsFilter {
+	return CheckpointsFilter{
+		before: func(co *checkpointsOptions) {
+			co.singular = true
+			co.slot = slot
+		},
+		after: nil,
+	}
 }

@@ -27,6 +27,7 @@ import (
 )
 
 func Test_Matches(t *testing.T) {
+	// Integration test that relies on a local instance of kupo, so skip for now
 	t.SkipNow()
 	c := New(WithEndpoint("http://localhost:1442"))
 	matches, err := c.Matches(context.Background(),
@@ -43,7 +44,7 @@ func Test_Matches(t *testing.T) {
 func Test_Options(t *testing.T) {
 	type testCase struct {
 		label    string
-		options  []Filter
+		options  []MatchesFilter
 		expected string
 	}
 
@@ -51,49 +52,49 @@ func Test_Options(t *testing.T) {
 	testCases := []testCase{
 		{
 			label:    "none",
-			options:  []Filter{},
+			options:  []MatchesFilter{},
 			expected: base + "",
 		},
 		{
 			label:    "spent",
-			options:  []Filter{OnlySpent()},
+			options:  []MatchesFilter{OnlySpent()},
 			expected: base + "?spent",
 		},
 		{
 			label:    "unspent",
-			options:  []Filter{OnlyUnspent()},
+			options:  []MatchesFilter{OnlyUnspent()},
 			expected: base + "?unspent",
 		},
 		{
 			label:    "overlapping",
-			options:  []Filter{Overlapping(123)},
+			options:  []MatchesFilter{Overlapping(123)},
 			expected: base + "?created_before=123&spent_after=123",
 		},
 		{
 			label:    "policy",
-			options:  []Filter{PolicyID("abc")},
+			options:  []MatchesFilter{PolicyID("abc")},
 			expected: base + "?policy_id=abc",
 		},
 		{
 			label:    "assetId",
-			options:  []Filter{AssetID("abc.xyz")},
+			options:  []MatchesFilter{AssetID("abc.xyz")},
 			expected: base + "?policy_id=abc&asset_name=xyz",
 		},
 		{
 			label:    "pattern",
-			options:  []Filter{Pattern("www")},
+			options:  []MatchesFilter{Pattern("www")},
 			expected: base + "/www",
 		},
 		{
 			label:    "mixed",
-			options:  []Filter{Overlapping(123), AssetID("abc.xyz"), Pattern("www")},
+			options:  []MatchesFilter{Overlapping(123), AssetID("abc.xyz"), Pattern("www")},
 			expected: base + "/www?created_before=123&spent_after=123&policy_id=abc&asset_name=xyz",
 		},
 	}
 	for _, tc := range testCases {
 		reqUrl, err := url.Parse(base)
 		assert.Nil(t, err)
-		opts := options{}
+		opts := matchesOptions{}
 		for _, o := range tc.options {
 			o(&opts)
 		}

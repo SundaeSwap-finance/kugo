@@ -29,7 +29,7 @@ import (
 	"github.com/SundaeSwap-finance/ogmigo/ouroboros/chainsync"
 )
 
-type options struct {
+type matchesOptions struct {
 	spent     bool
 	unspent   bool
 	pattern   string
@@ -42,7 +42,7 @@ type options struct {
 	spent_after    uint64
 }
 
-func (o options) apply(url *url.URL) {
+func (o matchesOptions) apply(url *url.URL) {
 	qs := ""
 	if o.spent && !o.unspent {
 		qs += "spent"
@@ -90,9 +90,9 @@ func (o options) apply(url *url.URL) {
 	url.RawQuery = qs
 }
 
-type Filter func(*options)
+type MatchesFilter func(*matchesOptions)
 
-func (c *Client) Matches(ctx context.Context, filters ...Filter) (matches []Match, err error) {
+func (c *Client) Matches(ctx context.Context, filters ...MatchesFilter) (matches []Match, err error) {
 	start := time.Now()
 	defer func() {
 		errStr := ""
@@ -107,12 +107,12 @@ func (c *Client) Matches(ctx context.Context, filters ...Filter) (matches []Matc
 	}()
 
 	url, err := url.Parse(c.options.endpoint)
-	url.Path = "/v1/matches"
 	if err != nil {
 		return nil, fmt.Errorf("unable to parse endpoint %v: %w", c.options.endpoint, err)
 	}
+	url.Path = "/v1/matches"
 
-	o := options{}
+	o := matchesOptions{}
 	for _, f := range filters {
 		f(&o)
 	}
@@ -145,70 +145,76 @@ func (c *Client) Matches(ctx context.Context, filters ...Filter) (matches []Matc
 	return matches, nil
 }
 
-func All() Filter {
-	return func(o *options) {
+func All() MatchesFilter {
+	return func(o *matchesOptions) {
 		o.spent = true
 		o.unspent = true
 	}
 }
 
-func OnlySpent() Filter {
-	return func(o *options) {
+func OnlySpent() MatchesFilter {
+	return func(o *matchesOptions) {
 		o.spent = true
 		o.unspent = false
 	}
 }
 
-func OnlyUnspent() Filter {
-	return func(o *options) {
+func OnlyUnspent() MatchesFilter {
+	return func(o *matchesOptions) {
 		o.unspent = true
 		o.spent = false
 	}
 }
 
-func Pattern(pattern string) Filter {
-	return func(o *options) {
+func Pattern(pattern string) MatchesFilter {
+	return func(o *matchesOptions) {
 		o.pattern = pattern
 	}
 }
 
-func PolicyID(policyId string) Filter {
-	return func(o *options) {
+func Address(address string) MatchesFilter {
+	return func(o *matchesOptions) {
+		o.pattern = address
+	}
+}
+
+func PolicyID(policyId string) MatchesFilter {
+	return func(o *matchesOptions) {
 		o.policyId = policyId
 	}
 }
 
-func AssetID(assetID chainsync.AssetID) Filter {
-	return func(o *options) {
+func AssetID(assetID chainsync.AssetID) MatchesFilter {
+	return func(o *matchesOptions) {
 		o.policyId = assetID.PolicyID()
 		o.assetName = assetID.AssetName()
 	}
 }
 
-func Overlapping(slot uint64) Filter {
-	return func(o *options) {
+func Overlapping(slot uint64) MatchesFilter {
+	return func(o *matchesOptions) {
 		o.created_before = slot
 		o.spent_after = slot
 	}
 }
 
-func CreatedBefore(slot uint64) Filter {
-	return func(o *options) {
+func CreatedBefore(slot uint64) MatchesFilter {
+	return func(o *matchesOptions) {
 		o.created_before = slot
 	}
 }
-func CreatedAfter(slot uint64) Filter {
-	return func(o *options) {
+func CreatedAfter(slot uint64) MatchesFilter {
+	return func(o *matchesOptions) {
 		o.created_after = slot
 	}
 }
-func SpentBefore(slot uint64) Filter {
-	return func(o *options) {
+func SpentBefore(slot uint64) MatchesFilter {
+	return func(o *matchesOptions) {
 		o.spent_before = slot
 	}
 }
-func SpentAfter(slot uint64) Filter {
-	return func(o *options) {
+func SpentAfter(slot uint64) MatchesFilter {
+	return func(o *matchesOptions) {
 		o.spent_after = slot
 	}
 }

@@ -4,16 +4,15 @@ go 1.17
 
 require (
 	github.com/SundaeSwap-finance/ogmigo v0.7.5-0.20220708200135-6887c55a6a29
-	github.com/aws/aws-sdk-go v1.44.17
 	github.com/tj/assert v0.0.3
 	github.com/urfave/cli/v2 v2.10.3
 )
 
 require (
+	github.com/aws/aws-sdk-go v1.44.17 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/fxamacker/cbor v1.5.1 // indirect
 	github.com/fxamacker/cbor/v2 v2.4.0 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
