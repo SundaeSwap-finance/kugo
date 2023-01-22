@@ -4,6 +4,8 @@
 
 Kugo is a golang client library for interacting with [Kupo](https://github.com/CardanoSolutions/kupo), a chain-indexer for Cardano.
 
+> :warning: **This is a pre-release package**: until we release v1.0.0, the interface may change as we identify the optimal usage patterns.
+
 ## QuickStart
 
 ### Getting started
