@@ -35,6 +35,8 @@ type matchesOptions struct {
 	pattern   string
 	policyId  string
 	assetName string
+	txHash    string
+	txIx      *int // This is a pointer so we can distinguish between null and 0
 	// Pagination properties
 	created_before uint64
 	spent_before   uint64
@@ -44,12 +46,14 @@ type matchesOptions struct {
 
 func (o matchesOptions) apply(url *url.URL) {
 	qs := ""
+	// Handle the mutually exclusive spent/unspent filters
 	if o.spent && !o.unspent {
 		qs += "spent"
 	} else if o.unspent && !o.spent {
 		qs += "unspent"
 	}
 
+	// Handle the pagination query params
 	if o.created_before != 0 {
 		if qs != "" {
 			qs += "&"
@@ -75,6 +79,30 @@ func (o matchesOptions) apply(url *url.URL) {
 		qs += fmt.Sprintf("spent_after=%v", o.spent_after)
 	}
 
+	// Handle txHash / index parameters
+	if o.txHash != "" {
+		if qs != "" {
+			qs += "&"
+		}
+
+		// If another pattern is specified, that pattern takes precedence
+		// and we need to specify these as query string parameters
+		if o.pattern != "" {
+			qs += fmt.Sprintf("transaction_id=%v", o.txHash)
+			if o.txIx != nil {
+				qs += fmt.Sprintf("&output_index=%v", *o.txIx)
+			}
+		} else {
+			// NOTE(pi): kugo uses 'idx@txHash' because # isn't safely url-encodable
+			if o.txIx == nil {
+				url.Path += fmt.Sprintf("/*@%v", o.txHash)
+			} else {
+				url.Path += fmt.Sprintf("/%v@%v", *o.txIx, o.txHash)
+			}
+		}
+	}
+
+	// Handle policy ID filters
 	if o.policyId != "" {
 		if qs != "" {
 			qs += "&"
@@ -94,9 +122,12 @@ func (o matchesOptions) apply(url *url.URL) {
 			}
 		}
 	}
+
+	// Handle explicit patterns
 	if o.pattern != "" {
 		url.Path += fmt.Sprintf("/%v", o.pattern)
 	}
+
 	url.RawQuery = qs
 }
 
@@ -185,6 +216,22 @@ func Pattern(pattern string) MatchesFilter {
 func Address(address string) MatchesFilter {
 	return func(o *matchesOptions) {
 		o.pattern = address
+	}
+}
+
+func Transaction(txHash string) MatchesFilter {
+	return func(o *matchesOptions) {
+		o.txHash = txHash
+	}
+}
+
+// NOTE(pi): chainsync.TxID is named poorly, and we plan to rename it at some point
+func TxOut(txOutId chainsync.TxID) MatchesFilter {
+	return func(o *matchesOptions) {
+		o.txHash = txOutId.TxHash()
+		// store locally so we can take the address
+		idx := txOutId.Index()
+		o.txIx = &idx
 	}
 }
 

@@ -81,6 +81,16 @@ func Test_Options(t *testing.T) {
 			expected: base + "/abc.xyz",
 		},
 		{
+			label:    "transaction",
+			options:  []MatchesFilter{Transaction("xyz")},
+			expected: base + "/%2A@xyz", // NOTE(pi): '*' url-encodes as %2A
+		},
+		{
+			label:    "txOut",
+			options:  []MatchesFilter{TxOut(chainsync.NewTxID("xyz", 1))},
+			expected: base + "/1@xyz", // NOTE(pi): '*' url-encodes as %2A
+		},
+		{
 			label:    "pattern",
 			options:  []MatchesFilter{Pattern("www")},
 			expected: base + "/www",
@@ -89,6 +99,21 @@ func Test_Options(t *testing.T) {
 			label:    "mixed",
 			options:  []MatchesFilter{Overlapping(123), AssetID("abc.xyz"), Pattern("www")},
 			expected: base + "/www?created_before=123&spent_after=123&policy_id=abc&asset_name=xyz",
+		},
+		{
+			label:    "mixed 2",
+			options:  []MatchesFilter{Overlapping(123), PolicyID("abc"), Pattern("www")},
+			expected: base + "/www?created_before=123&spent_after=123&policy_id=abc",
+		},
+		{
+			label:    "mixed 3",
+			options:  []MatchesFilter{Overlapping(123), TxOut(chainsync.NewTxID("xyz", 1)), Pattern("www")},
+			expected: base + "/www?created_before=123&spent_after=123&transaction_id=xyz&output_index=1",
+		},
+		{
+			label:    "mixed 4",
+			options:  []MatchesFilter{Overlapping(123), Transaction("xyz"), Pattern("www")},
+			expected: base + "/www?created_before=123&spent_after=123&transaction_id=xyz",
 		},
 	}
 	for _, tc := range testCases {

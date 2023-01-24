@@ -5,6 +5,7 @@
 #### Changed
 
  - Use assetId patterns when possible
+ - Add support for transaction_id and output_index patterns
 
 #### Removed
 
