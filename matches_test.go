@@ -48,7 +48,7 @@ func Test_Options(t *testing.T) {
 		expected string
 	}
 
-	base := "http://localhost:1442"
+	base := "http://localhost:1442/v1/matches"
 	testCases := []testCase{
 		{
 			label:    "none",
@@ -73,12 +73,12 @@ func Test_Options(t *testing.T) {
 		{
 			label:    "policy",
 			options:  []MatchesFilter{PolicyID("abc")},
-			expected: base + "?policy_id=abc",
+			expected: base + "/abc.%2A", // NOTE(pi): '*' url-encodes as %2A
 		},
 		{
 			label:    "assetId",
 			options:  []MatchesFilter{AssetID("abc.xyz")},
-			expected: base + "?policy_id=abc&asset_name=xyz",
+			expected: base + "/abc.xyz",
 		},
 		{
 			label:    "pattern",

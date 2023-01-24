@@ -79,9 +79,19 @@ func (o matchesOptions) apply(url *url.URL) {
 		if qs != "" {
 			qs += "&"
 		}
-		qs += fmt.Sprintf("policy_id=%v", o.policyId)
-		if o.assetName != "" {
-			qs += fmt.Sprintf("&asset_name=%v", o.assetName)
+		// If another pattern is specified, that pattern takes precedence
+		// and we need to specify these as query string parameters
+		if o.pattern != "" {
+			qs += fmt.Sprintf("policy_id=%v", o.policyId)
+			if o.assetName != "" {
+				qs += fmt.Sprintf("&asset_name=%v", o.assetName)
+			}
+		} else {
+			if o.assetName != "" {
+				url.Path += fmt.Sprintf("/%v.%v", o.policyId, o.assetName)
+			} else {
+				url.Path += fmt.Sprintf("/%v.*", o.policyId)
+			}
 		}
 	}
 	if o.pattern != "" {
