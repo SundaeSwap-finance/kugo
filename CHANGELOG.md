@@ -1,3 +1,13 @@
+### [v0.1.3] - 2023-03-21
+
+#### Added
+
+ - Support for metadata endpoint
+
+#### Changed
+
+#### Removed
+
 ### [v0.1.2] - 2023-03-21
 
 #### Added
