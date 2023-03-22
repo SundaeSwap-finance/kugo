@@ -1,3 +1,13 @@
+### [v0.1.2] - 2023-03-21
+
+#### Added
+
+ - Support for datums endpoint
+
+#### Changed
+
+#### Removed
+
 ### [v0.1.1] - 2023-01-23
 
 #### Added
