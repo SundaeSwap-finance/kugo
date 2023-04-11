@@ -1,3 +1,13 @@
+### [v0.1.4] - 2023-04-11
+
+#### Added
+
+ - Add 'Schema' field to 'Metadatum' field of metadata api response
+
+#### Changed
+
+#### Removed
+
 ### [v0.1.3] - 2023-03-21
 
 #### Added

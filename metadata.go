@@ -23,15 +23,16 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-        "strconv"
+	"strconv"
 	"time"
 
 	"github.com/SundaeSwap-finance/ogmigo"
 )
 
 type Metadatum struct {
-        Hash string
-        Raw string
+	Hash   string
+	Raw    string
+	Schema json.RawMessage
 }
 
 func (c *Client) Metadata(ctx context.Context, slotNo int, txId string) (metadatum []Metadatum, err error) {
@@ -53,9 +54,9 @@ func (c *Client) Metadata(ctx context.Context, slotNo int, txId string) (metadat
 	}
 	url.Path = "/v1/metadata/" + strconv.Itoa(slotNo)
 
-        if txId != "" {
-          url.Path += "?transaction_id=" + txId
-        }
+	if txId != "" {
+		url.Path += "?transaction_id=" + txId
+	}
 
 	req, err := http.NewRequest("GET", url.String(), nil)
 	if err != nil {
