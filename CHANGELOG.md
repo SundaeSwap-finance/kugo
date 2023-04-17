@@ -1,3 +1,13 @@
+### [v0.1.5] - 2023-04-17
+
+#### Added
+
+ - Add 'DatumType' field to 'Match' type
+
+#### Changed
+
+#### Removed
+
 ### [v0.1.4] - 2023-04-11
 
 #### Added
