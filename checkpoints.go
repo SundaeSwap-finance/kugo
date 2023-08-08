@@ -77,9 +77,11 @@ func (c *Client) Checkpoints(ctx context.Context, filters ...CheckpointsFilter) 
 		return nil, fmt.Errorf("failed to build request: %w", err)
 	}
 
+	req.Close = true
 	req = req.WithContext(ctx)
 
 	client := http.DefaultClient
+	client.Timeout = 5 * time.Minute
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to retrieve checkpoint by slot: %w", err)

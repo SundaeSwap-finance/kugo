@@ -52,9 +52,11 @@ func (c *Client) Datum(ctx context.Context, datumHash string) (datum string, err
 		return "", fmt.Errorf("unable to build request: %w", err)
 	}
 
+	req.Close = true
 	req = req.WithContext(ctx)
 
 	client := http.DefaultClient
+	client.Timeout = 5 * time.Minute
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("unable to fetch datum: %w", err)
