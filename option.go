@@ -16,7 +16,7 @@
 
 package kugo
 
-import "github.com/SundaeSwap-finance/ogmigo"
+import "github.com/SundaeSwap-finance/ogmigo/v6"
 
 // Options available to kugo client
 type Options struct {

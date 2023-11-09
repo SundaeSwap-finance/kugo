@@ -25,7 +25,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/SundaeSwap-finance/ogmigo"
+	"github.com/SundaeSwap-finance/ogmigo/v6"
 )
 
 type checkpointsOptions struct {
