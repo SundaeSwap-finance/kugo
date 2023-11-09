@@ -77,7 +77,7 @@ func Test_Options(t *testing.T) {
 		},
 		{
 			label:    "assetId",
-			options:  []MatchesFilter{AssetID("abc.xyz")},
+			options:  []MatchesFilter{AssetID(chainsync.AssetID("abc.xyz"))},
 			expected: base + "/abc.xyz",
 		},
 		{
@@ -97,7 +97,7 @@ func Test_Options(t *testing.T) {
 		},
 		{
 			label:    "mixed",
-			options:  []MatchesFilter{Overlapping(123), AssetID("abc.xyz"), Pattern("www")},
+			options:  []MatchesFilter{Overlapping(123), AssetID(chainsync.AssetID("abc.xyz")), Pattern("www")},
 			expected: base + "/www?created_before=123&spent_after=123&policy_id=abc&asset_name=xyz",
 		},
 		{

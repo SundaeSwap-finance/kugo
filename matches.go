@@ -243,7 +243,12 @@ func PolicyID(policyId string) MatchesFilter {
 	}
 }
 
-func AssetID(assetID chainsync.AssetID) MatchesFilter {
+type AssetId interface {
+	PolicyID() string
+	AssetName() string
+}
+
+func AssetID(assetID AssetId) MatchesFilter {
 	return func(o *matchesOptions) {
 		o.policyId = assetID.PolicyID()
 		o.assetName = assetID.AssetName()
