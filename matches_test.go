@@ -22,7 +22,9 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/SundaeSwap-finance/ogmigo/ouroboros/chainsync"
+	"github.com/SundaeSwap-finance/ogmigo/v6/ouroboros/chainsync"
+	"github.com/SundaeSwap-finance/ogmigo/v6/ouroboros/shared"
+
 	"github.com/tj/assert"
 )
 
@@ -32,7 +34,7 @@ func Test_Matches(t *testing.T) {
 	c := New(WithEndpoint("http://localhost:1442"))
 	matches, err := c.Matches(context.Background(),
 		OnlyUnspent(),
-		AssetID(chainsync.AssetID("4fc16c94d066e949e771c5581235f8090ad6aaffaf373a426445ca51.73636f6f70209a0a")),
+		AssetID(shared.AssetID("4fc16c94d066e949e771c5581235f8090ad6aaffaf373a426445ca51.73636f6f70209a0a")),
 		Pattern("addr_test1qpluezahtqdtwg4f7qewdvjvz806hsatqwr4u04yzcrk2m7pucvj7jyhq97rca9m0wul2fu3qnsayxvqdwlda8wngurqgyfepe"),
 	)
 	assert.Nil(t, err)
@@ -77,7 +79,7 @@ func Test_Options(t *testing.T) {
 		},
 		{
 			label:    "assetId",
-			options:  []MatchesFilter{AssetID(chainsync.AssetID("abc.xyz"))},
+			options:  []MatchesFilter{AssetID(shared.AssetID("abc.xyz"))},
 			expected: base + "/abc.xyz",
 		},
 		{
@@ -97,7 +99,7 @@ func Test_Options(t *testing.T) {
 		},
 		{
 			label:    "mixed",
-			options:  []MatchesFilter{Overlapping(123), AssetID(chainsync.AssetID("abc.xyz")), Pattern("www")},
+			options:  []MatchesFilter{Overlapping(123), AssetID(shared.AssetID("abc.xyz")), Pattern("www")},
 			expected: base + "/www?created_before=123&spent_after=123&policy_id=abc&asset_name=xyz",
 		},
 		{

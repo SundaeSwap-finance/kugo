@@ -25,7 +25,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/SundaeSwap-finance/ogmigo"
+	"github.com/SundaeSwap-finance/ogmigo/v6"
 )
 
 func (c *Client) Datum(ctx context.Context, datumHash string) (datum string, err error) {

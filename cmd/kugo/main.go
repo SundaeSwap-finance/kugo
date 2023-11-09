@@ -9,7 +9,7 @@ import (
 	"os"
 
 	"github.com/SundaeSwap-finance/kugo"
-	"github.com/SundaeSwap-finance/ogmigo/ouroboros/chainsync"
+	"github.com/SundaeSwap-finance/ogmigo/v6/ouroboros/shared"
 	"github.com/urfave/cli/v2"
 )
 
@@ -143,7 +143,7 @@ func action(_ *cli.Context) error {
 			}
 			assetName = string(assetNameBytes)
 		}
-		filters = append(filters, kugo.AssetID(chainsync.AssetID(fmt.Sprintf("%v.%v", opts.PolicyID, assetName))))
+		filters = append(filters, kugo.AssetID(shared.AssetID(fmt.Sprintf("%v.%v", opts.PolicyID, assetName))))
 	}
 	if opts.Overlapping > 0 {
 		filters = append(filters, kugo.Overlapping(opts.Overlapping))
