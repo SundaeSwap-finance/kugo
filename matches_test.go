@@ -18,8 +18,10 @@ package kugo
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/url"
+	"os"
 	"testing"
 
 	"github.com/SundaeSwap-finance/ogmigo/v6/ouroboros/chainsync"
@@ -128,4 +130,12 @@ func Test_Options(t *testing.T) {
 		opts.apply(reqUrl)
 		assert.Equal(t, tc.expected, reqUrl.String(), tc.label)
 	}
+}
+
+func Test_Parse_v5(t *testing.T) {
+	v5Payload, err := os.ReadFile("test_data/v5_matches.json")
+	assert.Nil(t, err)
+	var matches []Match
+	assert.Nil(t, json.Unmarshal(v5Payload, &matches))
+	assert.EqualValues(t, 33, len(matches))
 }

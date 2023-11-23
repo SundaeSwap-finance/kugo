@@ -1,3 +1,7 @@
+### [v1.0.2] - 2023-11-23
+
+ - Force a version bump, v1.0.1 wasn't updating for some
+
 ### [v1.0.1] - 2023-11-23
 
  - Use "Compatible" value for matches, so we can consume from old v5 ogmios instances
