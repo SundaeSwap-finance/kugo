@@ -1,3 +1,11 @@
+### [v1.0.1] - 2023-11-23
+
+ - Use "Compatible" value for matches, so we can consume from old v5 ogmios instances
+
+### [v1.0.0] - 2023-11-09
+
+ - 1.0.0 release; Upgrades to ogmigo v6, which supports ogmios v6 types, so this is a breaking change.
+
 ### [v0.1.5] - 2023-04-17
 
 #### Added
