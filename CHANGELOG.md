@@ -1,3 +1,7 @@
+### [v1.0.3] - 2023-11-25
+
+ - Preserve serialization formats on the wire for now
+
 ### [v1.0.2] - 2023-11-23
 
  - Force a version bump, v1.0.1 wasn't updating for some
