@@ -3,13 +3,12 @@ module github.com/SundaeSwap-finance/kugo
 go 1.17
 
 require (
-	github.com/SundaeSwap-finance/ogmigo v0.7.5-0.20220708200135-6887c55a6a29
+	github.com/SundaeSwap-finance/ogmigo/v6 v6.0.0-20231124031437-1e1bf6f49bb9
 	github.com/tj/assert v0.0.3
 	github.com/urfave/cli/v2 v2.10.3
 )
 
 require (
-	github.com/SundaeSwap-finance/ogmigo/v6 v6.0.0-20231124031437-1e1bf6f49bb9 // indirect
 	github.com/aws/aws-sdk-go v1.48.3 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
