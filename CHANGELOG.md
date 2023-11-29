@@ -1,3 +1,7 @@
+### [v1.0.5] - 2023-11-29
+
+ - I'm not sure I understand go modules :sweat_smile:
+
 ### [v1.0.4] - 2023-11-29
 
  - Bumping versions in go.mod
