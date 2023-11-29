@@ -1,3 +1,7 @@
+### [v1.0.4] - 2023-11-29
+
+ - Bumping versions in go.mod
+
 ### [v1.0.3] - 2023-11-25
 
  - Preserve serialization formats on the wire for now
