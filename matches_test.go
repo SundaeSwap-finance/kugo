@@ -1,7 +1,14 @@
 // Copyright 2022 SundaeSwap Labs, Inc.
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:Licensed under the MIT License;
-// you may not use this file except in compliance with the License.
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software
+// is furnished to do so, subject to the following conditions:
+//
+// Licensed under the MIT License;
+// You may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
 //    https://opensource.org/licenses/MIT
@@ -20,6 +27,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"os"
 	"testing"
@@ -31,9 +40,29 @@ import (
 )
 
 func Test_Matches(t *testing.T) {
-	// Integration test that relies on a local instance of kupo, so skip for now
-	t.SkipNow()
-	c := New(WithEndpoint("http://localhost:1442"))
+	t.Parallel()
+	server := httptest.NewServer(
+		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.URL.Path == "/v1/matches/addr_test1qpluezahtqdtwg4f7qewdvjvz806hsatqwr4u04yzcrk2m7pucvj7jyhq97rca9m0wul2fu3qnsayxvqdwlda8wngurqgyfepe" {
+				response := []Match{
+					{
+						TransactionIndex: 1,
+						TransactionID: "abcdef",
+						OutputIndex: 0,
+						Address: "addr_test1qpluezahtqdtwg4f7qewdvjvz806hsatqwr4u04yzcrk2m7pucvj7jyhq97rca9m0wul2fu3qnsayxvqdwlda8wngurqgyfepe",
+					},
+				}
+				respBody, _ := json.Marshal(response)
+				w.WriteHeader(http.StatusOK)
+				_, _ = w.Write(respBody)
+			} else {
+				w.WriteHeader(http.StatusNotFound)
+			}
+		}),
+	)
+	defer server.Close()
+
+	c := New(WithEndpoint(server.URL))
 	matches, err := c.Matches(context.Background(),
 		OnlyUnspent(),
 		AssetID(shared.AssetID("4fc16c94d066e949e771c5581235f8090ad6aaffaf373a426445ca51.73636f6f70209a0a")),
