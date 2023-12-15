@@ -27,8 +27,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
-	"net/http/httptest"
 	"net/url"
 	"os"
 	"testing"
@@ -41,25 +39,16 @@ import (
 
 func Test_Matches(t *testing.T) {
 	t.Parallel()
-	server := httptest.NewServer(
-		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if r.URL.Path == "/v1/matches/addr_test1qpluezahtqdtwg4f7qewdvjvz806hsatqwr4u04yzcrk2m7pucvj7jyhq97rca9m0wul2fu3qnsayxvqdwlda8wngurqgyfepe" {
-				response := []Match{
-					{
-						TransactionIndex: 1,
-						TransactionID: "abcdef",
-						OutputIndex: 0,
-						Address: "addr_test1qpluezahtqdtwg4f7qewdvjvz806hsatqwr4u04yzcrk2m7pucvj7jyhq97rca9m0wul2fu3qnsayxvqdwlda8wngurqgyfepe",
-					},
-				}
-				respBody, _ := json.Marshal(response)
-				w.WriteHeader(http.StatusOK)
-				_, _ = w.Write(respBody)
-			} else {
-				w.WriteHeader(http.StatusNotFound)
-			}
-		}),
-	)
+	match := Match{
+		TransactionIndex: 1,
+		TransactionID:    "abcdef",
+		OutputIndex:      0,
+		Address:          "addr_test1qpluezahtqdtwg4f7qewdvjvz806hsatqwr4u04yzcrk2m7pucvj7jyhq97rca9m0wul2fu3qnsayxvqdwlda8wngurqgyfepe",
+	}
+	server := NewMockServer().AddMatches(
+		"addr_test1qpluezahtqdtwg4f7qewdvjvz806hsatqwr4u04yzcrk2m7pucvj7jyhq97rca9m0wul2fu3qnsayxvqdwlda8wngurqgyfepe",
+		match,
+	).HTTP()
 	defer server.Close()
 
 	c := New(WithEndpoint(server.URL))

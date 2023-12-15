@@ -25,6 +25,7 @@ package kugo
 
 import (
 	"context"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -33,11 +34,26 @@ import (
 	"time"
 
 	"github.com/SundaeSwap-finance/ogmigo/v6"
+	"golang.org/x/crypto/blake2b"
 )
 
 type Script struct {
-	Language string `json:language`
-	Script   string `json:script`
+	Language string `json:"language"`
+	Script   string `json:"script"`
+}
+
+func (s Script) Hash() []byte {
+	scriptBytes, _ := hex.DecodeString(s.Script)
+	blake, _ := blake2b.New(224/8, nil)
+	switch s.Language {
+	case "plutus:v1":
+		blake.Write([]byte{0x01})
+	case "plutus:v2":
+		blake.Write([]byte{0x02})
+	}
+	blake.Write(scriptBytes)
+	hashBytes := blake.Sum(nil)
+	return hashBytes[:]
 }
 
 func (c *Client) Script(ctx context.Context, scriptHash string) (script *Script, err error) {

@@ -25,11 +25,9 @@ package kugo
 
 import (
 	"context"
-	"encoding/json"
-	"net/http"
-	"net/http/httptest"
-	"reflect"
 	"testing"
+
+	"github.com/tj/assert"
 )
 
 func TestClient_Scripts(t *testing.T) {
@@ -38,42 +36,21 @@ func TestClient_Scripts(t *testing.T) {
 		func(t *testing.T) {
 			t.Parallel()
 
-			server := httptest.NewServer(
-				http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-					if r.URL.Path == "/v1/script/4fc6bb0c93780ad706425d9f7dc1d3c5e3ddbf29ba8486dce904a5fc" {
-						response := &Script{
-							Language: "plutus:v2",
-							Script:   "8201838200581c3c07030e36bfffe67e2e2ec09e5293d384637cd2f004356ef320f3fe8204186482051896",
-						}
-						respBody, _ := json.Marshal(response)
-						w.WriteHeader(http.StatusOK)
-						_, _ = w.Write(respBody)
-					} else {
-						w.WriteHeader(http.StatusNotFound)
-					}
-				}),
-			)
+			script := Script{
+				Language: "plutus:v2",
+				Script:   "8201838200581c3c07030e36bfffe67e2e2ec09e5293d384637cd2f004356ef320f3fe8204186482051896",
+			}
+			server := NewMockServer().AddScripts(script).HTTP()
 			defer server.Close()
 
 			client := New(WithEndpoint(server.URL))
 			scriptResponse, err := client.Script(
 				context.Background(),
-				"4fc6bb0c93780ad706425d9f7dc1d3c5e3ddbf29ba8486dce904a5fc",
+				"7031704ad63598d8d6bbc33550c0bb570f002fc9a46c7e1844e791d1",
 			)
-			expectedResponse := &Script{
-				Language: "plutus:v2",
-				Script:   "8201838200581c3c07030e36bfffe67e2e2ec09e5293d384637cd2f004356ef320f3fe8204186482051896",
-			}
-			if err != nil {
-				t.Fatalf("Expected no error, got %s", err)
-			}
-			if !reflect.DeepEqual(scriptResponse, expectedResponse) {
-				t.Errorf(
-					"Expected response %v, got %v",
-					expectedResponse,
-					scriptResponse,
-				)
-			}
+			assert.Nil(t, err)
+			assert.NotNil(t, scriptResponse)
+			assert.EqualValues(t, script, *scriptResponse)
 		},
 	)
 
@@ -82,12 +59,7 @@ func TestClient_Scripts(t *testing.T) {
 		func(t *testing.T) {
 			t.Parallel()
 
-			server := httptest.NewServer(
-				http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-					w.WriteHeader(http.StatusOK)
-					_, _ = w.Write([]byte("null"))
-				}),
-			)
+			server := NewMockServer().HTTP()
 			defer server.Close()
 
 			client := New(WithEndpoint(server.URL))
@@ -95,12 +67,8 @@ func TestClient_Scripts(t *testing.T) {
 				context.Background(),
 				"4fc6bb0c93780ad706425d9f7dc1d3c5e3ddbf29ba8486dce904a5fc",
 			)
-			if err != nil {
-				t.Fatalf("Expected no error, got %s", err)
-			}
-			if scriptResponse != nil {
-				t.Errorf("Expected nil response, got %v", scriptResponse)
-			}
+			assert.Nil(t, err)
+			assert.Nil(t, scriptResponse)
 		},
 	)
 }

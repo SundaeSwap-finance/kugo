@@ -26,10 +26,9 @@ package kugo
 import (
 	"context"
 	"encoding/json"
-	"net/http"
-	"net/http/httptest"
-	"reflect"
 	"testing"
+
+	"github.com/tj/assert"
 )
 
 func TestClient_Metadata(t *testing.T) {
@@ -38,24 +37,18 @@ func TestClient_Metadata(t *testing.T) {
 		func(t *testing.T) {
 			t.Parallel()
 
-			server := httptest.NewServer(
-				http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-					if r.URL.Path == "/v1/metadata/108923398" {
-						response := []Metadatum{
-							{
-								Hash: "b64602eebf602e8bbce198e2a1d6bbb2a109ae87fa5316135d217110d6d94649",
-								Raw:  "a11902a2a1636d736781781c4d696e737761703a205377617020457861637420496e204f72646572",
-								Schema: json.RawMessage(`{"exampleKey":"exampleValue"}`),
-							},
-						}
-						respBody, _ := json.Marshal(response)
-						w.WriteHeader(http.StatusOK)
-						_, _ = w.Write(respBody)
-					} else {
-						w.WriteHeader(http.StatusNotFound)
-					}
-				}),
-			)
+			m := Metadatum{
+				Hash:   "b64602eebf602e8bbce198e2a1d6bbb2a109ae87fa5316135d217110d6d94649",
+				Raw:    "a11902a2a1636d736781781c4d696e737761703a205377617020457861637420496e204f72646572",
+				Schema: json.RawMessage(`{"exampleKey":"exampleValue"}`),
+			}
+			server := NewMockServer().AddMetadata(
+				MetadatumEntry{
+					Slot:      108923398,
+					Tx:        "tx1",
+					Metadatum: m,
+				},
+			).HTTP()
 			defer server.Close()
 
 			client := New(WithEndpoint(server.URL))
@@ -64,24 +57,10 @@ func TestClient_Metadata(t *testing.T) {
 				108923398,
 				"",
 			)
-			if err != nil {
-				t.Fatalf("Expected no error, got %s", err)
-			}
-			expectedList := []Metadatum{
-				{
-					Hash:   "b64602eebf602e8bbce198e2a1d6bbb2a109ae87fa5316135d217110d6d94649",
-					Raw:    "a11902a2a1636d736781781c4d696e737761703a205377617020457861637420496e204f72646572",
-					Schema: json.RawMessage(`{"exampleKey":"exampleValue"}`),
-				},
-			}
+			assert.Nil(t, err)
+			expectedList := []Metadatum{m}
 
-			if !reflect.DeepEqual(metadataResponse, expectedList) {
-				t.Errorf(
-					"Expected response %v, got %v",
-					expectedList,
-					metadataResponse,
-				)
-			}
+			assert.EqualValues(t, expectedList, metadataResponse)
 		},
 	)
 
@@ -90,14 +69,7 @@ func TestClient_Metadata(t *testing.T) {
 		func(t *testing.T) {
 			t.Parallel()
 
-			server := httptest.NewServer(
-				http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-					w.WriteHeader(http.StatusOK)
-					response := []Metadatum{}
-					respBody, _ := json.Marshal(response)
-					_, _ = w.Write(respBody)
-				}),
-			)
+			server := NewMockServer().HTTP()
 			defer server.Close()
 
 			client := New(WithEndpoint(server.URL))

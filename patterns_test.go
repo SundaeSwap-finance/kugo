@@ -25,9 +25,6 @@ package kugo
 
 import (
 	"context"
-	"encoding/json"
-	"net/http"
-	"net/http/httptest"
 	"fmt"
 	"testing"
 
@@ -36,18 +33,7 @@ import (
 
 func Test_Patterns(t *testing.T) {
 	t.Parallel()
-	server := httptest.NewServer(
-		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if r.URL.Path == "/v1/patterns" {
-				response := []string{"*"}
-				respBody, _ := json.Marshal(response)
-				w.WriteHeader(http.StatusOK)
-				_, _ = w.Write(respBody)
-			} else {
-				w.WriteHeader(http.StatusNotFound)
-			}
-		}),
-	)
+	server := NewMockServer().AddPatterns("*").HTTP()
 	defer server.Close()
 
 	c := New(WithEndpoint(server.URL))

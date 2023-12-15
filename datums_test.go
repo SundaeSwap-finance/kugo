@@ -25,11 +25,9 @@ package kugo
 
 import (
 	"context"
-	"encoding/json"
-	"net/http"
-	"net/http/httptest"
-	"reflect"
 	"testing"
+
+	"github.com/tj/assert"
 )
 
 func TestClient_Datum(t *testing.T) {
@@ -38,23 +36,10 @@ func TestClient_Datum(t *testing.T) {
 		func(t *testing.T) {
 			t.Parallel()
 
-			type DatumResponse struct {
-				Datum string
-			}
-			server := httptest.NewServer(
-				http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-					if r.URL.Path == "/v1/datums/34215ad90b1ade84f5b4fe3c0a16cb3afeae468210535e0305efd93931f35059" {
-						response := DatumResponse{
-							Datum: "d87980",
-						}
-						respBody, _ := json.Marshal(response)
-						w.WriteHeader(http.StatusOK)
-						_, _ = w.Write(respBody)
-					} else {
-						w.WriteHeader(http.StatusNotFound)
-					}
-				}),
-			)
+			server := NewMockServer().AddDatum(
+				"34215ad90b1ade84f5b4fe3c0a16cb3afeae468210535e0305efd93931f35059",
+				"d87980",
+			).HTTP()
 			defer server.Close()
 
 			client := New(WithEndpoint(server.URL))
@@ -63,16 +48,8 @@ func TestClient_Datum(t *testing.T) {
 				"34215ad90b1ade84f5b4fe3c0a16cb3afeae468210535e0305efd93931f35059",
 			)
 			expectedResponse := "d87980"
-			if err != nil {
-				t.Fatalf("Expected no error, got %s", err)
-			}
-			if !reflect.DeepEqual(datumResponse, expectedResponse) {
-				t.Errorf(
-					"Expected response %v, got %v",
-					expectedResponse,
-					datumResponse,
-				)
-			}
+			assert.Nil(t, err)
+			assert.EqualValues(t, expectedResponse, datumResponse)
 		},
 	)
 
@@ -81,17 +58,7 @@ func TestClient_Datum(t *testing.T) {
 		func(t *testing.T) {
 			t.Parallel()
 
-			type DatumResponse struct {
-				Datum string
-			}
-			server := httptest.NewServer(
-				http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-					w.WriteHeader(http.StatusOK)
-					response := DatumResponse{}
-					respBody, _ := json.Marshal(response)
-					_, _ = w.Write(respBody)
-				}),
-			)
+			server := NewMockServer().HTTP()
 			defer server.Close()
 
 			client := New(WithEndpoint(server.URL))
