@@ -83,8 +83,9 @@ func (c *Client) Script(ctx context.Context, scriptHash string) (script *Script,
 	req.Close = true
 	req = req.WithContext(ctx)
 
-	client := http.DefaultClient
-	client.Timeout = 5 * time.Minute
+	client := &http.Client{
+		Timeout: 5 * time.Minute,
+	}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("unable to fetch script: %w", err)
