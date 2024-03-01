@@ -177,8 +177,9 @@ func (c *Client) Matches(ctx context.Context, filters ...MatchesFilter) (matches
 	req.Close = true
 	req = req.WithContext(ctx)
 
-	client := http.DefaultClient
-	client.Timeout = 5 * time.Minute
+	client := &http.Client{
+		Timeout: 5 * time.Minute,
+	}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("unable to fetch matches: %w", err)

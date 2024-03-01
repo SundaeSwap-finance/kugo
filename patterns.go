@@ -56,8 +56,9 @@ func (c *Client) Patterns(ctx context.Context) (matches []string, err error) {
 	req.Close = true
 	req = req.WithContext(ctx)
 
-	client := http.DefaultClient
-	client.Timeout = 5 * time.Minute
+	client := &http.Client{
+		Timeout: 5 * time.Minute,
+	}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to retrieve patterns: %w", err)
