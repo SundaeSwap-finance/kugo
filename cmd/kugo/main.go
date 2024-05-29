@@ -191,7 +191,10 @@ func action(_ *cli.Context) error {
 
 	encoder := json.NewEncoder(os.Stdout)
 	encoder.SetIndent("", "  ")
-	encoder.Encode(&matches)
+	err = encoder.Encode(&matches)
+	if err != nil {
+		return fmt.Errorf("failed to encode matches: %w", err)
+	}
 
 	return nil
 }
