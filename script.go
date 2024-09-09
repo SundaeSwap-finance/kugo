@@ -84,7 +84,7 @@ func (c *Client) Script(ctx context.Context, scriptHash string) (script *Script,
 	req = req.WithContext(ctx)
 
 	client := &http.Client{
-		Timeout: 5 * time.Minute,
+		Timeout: c.options.timeout,
 	}
 	resp, err := client.Do(req)
 	if err != nil {

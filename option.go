@@ -23,16 +23,35 @@
 
 package kugo
 
-import "github.com/SundaeSwap-finance/ogmigo/v6"
+import (
+	"time"
+
+	"github.com/SundaeSwap-finance/ogmigo/v6"
+)
 
 // Options available to kugo client
 type Options struct {
 	endpoint string
+	timeout  time.Duration
 	logger   ogmigo.Logger
 }
 
 // Option to kugo client
 type Option func(*Options)
+
+// Keep the http connection open as long as possible
+func WithoutTimeout() Option {
+	return func(opts *Options) {
+		opts.timeout = 0
+	}
+}
+
+// Set a specific timeout for all requests
+func WithTimeout(timeout time.Duration) Option {
+	return func(opts *Options) {
+		opts.timeout = timeout
+	}
+}
 
 // WithEndpoint allows kupo endpoint to be set; defaults to http://127.0.0.1:1442
 func WithEndpoint(endpoint string) Option {
@@ -50,6 +69,7 @@ func WithLogger(logger ogmigo.Logger) Option {
 
 func buildOptions(opts ...Option) Options {
 	var options Options
+	options.timeout = 5 * time.Minute
 	for _, opt := range opts {
 		opt(&options)
 	}

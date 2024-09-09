@@ -88,7 +88,7 @@ func (c *Client) Checkpoints(ctx context.Context, filters ...CheckpointsFilter) 
 	req = req.WithContext(ctx)
 
 	client := &http.Client{
-		Timeout: 5 * time.Minute,
+		Timeout: c.options.timeout,
 	}
 	resp, err := client.Do(req)
 	if err != nil {

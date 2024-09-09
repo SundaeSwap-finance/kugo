@@ -63,7 +63,7 @@ func (c *Client) Datum(ctx context.Context, datumHash string) (datum string, err
 	req = req.WithContext(ctx)
 
 	client := &http.Client{
-		Timeout: 5 * time.Minute,
+		Timeout: c.options.timeout,
 	}
 	resp, err := client.Do(req)
 	if err != nil {
