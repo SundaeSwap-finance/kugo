@@ -80,6 +80,9 @@ func (c *Client) Metadata(ctx context.Context, slotNo int, txId string) (metadat
 	if err != nil {
 		return nil, fmt.Errorf("unable to fetch metadata: %w", err)
 	}
+	if resp == nil {
+		return nil, fmt.Errorf("failed with a nil response")
+	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
