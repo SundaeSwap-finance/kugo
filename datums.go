@@ -69,6 +69,9 @@ func (c *Client) Datum(ctx context.Context, datumHash string) (datum string, err
 	if err != nil {
 		return "", fmt.Errorf("unable to fetch datum: %w", err)
 	}
+	if resp == nil {
+		return "", fmt.Errorf("failed with a nil response")
+	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {

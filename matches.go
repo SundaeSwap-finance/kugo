@@ -184,6 +184,9 @@ func (c *Client) Matches(ctx context.Context, filters ...MatchesFilter) (matches
 	if err != nil {
 		return nil, fmt.Errorf("unable to fetch matches: %w", err)
 	}
+	if resp == nil {
+		return nil, fmt.Errorf("failed with a nil response")
+	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {

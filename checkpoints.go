@@ -94,6 +94,9 @@ func (c *Client) Checkpoints(ctx context.Context, filters ...CheckpointsFilter) 
 	if err != nil {
 		return nil, fmt.Errorf("failed to retrieve checkpoint by slot: %w", err)
 	}
+	if resp == nil {
+		return nil, fmt.Errorf("failed with a nil response")
+	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
