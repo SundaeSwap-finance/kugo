@@ -31,7 +31,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/SundaeSwap-finance/ogmigo/v6"
+	"github.com/SundaeSwap-finance/ogmigo"
 )
 
 func (c *Client) Patterns(ctx context.Context) (matches []string, err error) {
