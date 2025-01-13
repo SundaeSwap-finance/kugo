@@ -148,7 +148,7 @@ func (c *Client) Matches(ctx context.Context, filters ...MatchesFilter) (matches
 		if err != nil {
 			errStr = err.Error()
 		}
-		c.options.logger.Info("Matches() finished",
+		c.options.logger.Debug("Matches() finished",
 			ogmigo.KV("duration", time.Since(start).Round(time.Millisecond).String()),
 			ogmigo.KV("matched", fmt.Sprintf("%v", len(matches))),
 			ogmigo.KV("err", errStr),
