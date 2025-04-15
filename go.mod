@@ -1,9 +1,9 @@
 module github.com/SundaeSwap-finance/kugo
 
-go 1.17
+go 1.19
 
 require (
-	github.com/SundaeSwap-finance/ogmigo v0.9.0
+	github.com/SundaeSwap-finance/ogmigo v0.10.0
 	github.com/tj/assert v0.0.3
 	github.com/urfave/cli/v2 v2.10.3
 	golang.org/x/crypto v0.32.0
@@ -17,6 +17,7 @@ require (
 	github.com/fxamacker/cbor/v2 v2.7.0 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/stretchr/testify v1.8.1 // indirect
