@@ -1,0 +1,10 @@
+{
+  "transaction_index": 0,
+  "transaction_id": "1111111111111111111111111111111111111111111111111111111111111111",
+  "output_index": 0,
+  "address": "addr1vy3qpx09uscywhpp0ekg9zwmq2yj5vp08husfq6qyh2mpps865j6t",
+  "value": {
+    "coins": 1000000
+  },
+  "script_hash": "abc"
+}

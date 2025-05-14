@@ -1,0 +1,13 @@
+{
+  "transaction_index": 1,
+  "transaction_id": "2222222222222222222222222222222222222222222222222222222222222222",
+  "output_index": 3,
+  "address": "addr1vy3qpx09uscywhpp0ekg9zwmq2yj5vp08husfq6qyh2mpps865j6t",
+  "value": {
+    "coins": 4000000,
+    "assets": {
+      "1220099e5e430475c219518179efc7e6c8289db028904834025d5b086": 555,
+      "289db028904834025d5b085d5b08661220099e5e430475c2195181796.08661220099e": 66
+    }
+  }
+}
