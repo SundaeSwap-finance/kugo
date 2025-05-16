@@ -41,6 +41,7 @@ type Match struct {
 	CreatedAt        Point           `json:"created_at,omitempty"`
 	SpentAt          Point           `json:"spent_at,omitempty"`
 	ScriptHash       string          `json:"script_hash,omitempty"`
+	Script           Script          `json:"script,omitempty"`
 }
 
 type Value shared.Value

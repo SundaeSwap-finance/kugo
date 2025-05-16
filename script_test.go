@@ -37,7 +37,7 @@ func TestClient_Scripts(t *testing.T) {
 			t.Parallel()
 
 			script := Script{
-				Language: "plutus:v2",
+				Language: ScriptLanguagePlutusV2,
 				Script:   "8201838200581c3c07030e36bfffe67e2e2ec09e5293d384637cd2f004356ef320f3fe8204186482051896",
 			}
 			server := NewMockServer().AddScripts(script).HTTP()

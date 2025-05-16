@@ -37,19 +37,77 @@ import (
 	"golang.org/x/crypto/blake2b"
 )
 
+
+type ScriptLanguage int
+
+const (
+	ScriptLanguageNative ScriptLanguage = iota
+	ScriptLanguagePlutusV1
+	ScriptLanguagePlutusV2
+	ScriptLanguagePlutusV3
+)
+
 type Script struct {
-	Language string `json:"language"`
-	Script   string `json:"script"`
+	Language ScriptLanguage
+	Script string
+}
+
+func (s *Script) MarshalJSON() ([]byte, error) {
+	var r struct {
+		Language string
+		Script string
+	}
+	switch s.Language {
+	case ScriptLanguageNative:
+		r.Language = "native"
+	case ScriptLanguagePlutusV1:
+		r.Language = "plutus:v1"
+	case ScriptLanguagePlutusV2:
+		r.Language = "plutus:v2"
+	case ScriptLanguagePlutusV3:
+		r.Language = "plutus:v3"
+	}
+	r.Script = s.Script
+	return json.Marshal(r)
+}
+
+func (s *Script) UnmarshalJSON(data []byte) error {
+	var r struct {
+		Language string
+		Script string
+	}
+	err := json.Unmarshal(data, &r)
+	if err != nil {
+		return err
+	}
+	switch r.Language {
+	case "native":
+		s.Language = ScriptLanguageNative
+	case "plutus:v1":
+		s.Language = ScriptLanguagePlutusV1
+	case "plutus:v2":
+		s.Language = ScriptLanguagePlutusV2
+	case "plutus:v3":
+		s.Language = ScriptLanguagePlutusV3
+	default:
+		return fmt.Errorf("Unknown script language version: '%v'", r.Language)
+	}
+	s.Script = r.Script
+	return nil
 }
 
 func (s Script) Hash() []byte {
 	scriptBytes, _ := hex.DecodeString(s.Script)
 	blake, _ := blake2b.New(224/8, nil)
 	switch s.Language {
-	case "plutus:v1":
+	case ScriptLanguageNative:
+		blake.Write([]byte{0x00})
+	case ScriptLanguagePlutusV1:
 		blake.Write([]byte{0x01})
-	case "plutus:v2":
+	case ScriptLanguagePlutusV2:
 		blake.Write([]byte{0x02})
+	case ScriptLanguagePlutusV3:
+		blake.Write([]byte{0x03})
 	}
 	blake.Write(scriptBytes)
 	hashBytes := blake.Sum(nil)
