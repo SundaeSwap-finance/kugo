@@ -39,7 +39,7 @@ type Match struct {
 	DatumType        string          `json:"datum_type,omitempty"`
 	Value            Value           `json:"value,omitempty"`
 	CreatedAt        Point           `json:"created_at,omitempty"`
-	SpentAt          Point           `json:"spent_at,omitempty"`
+	SpentAt          SpentAt         `json:"spent_at,omitempty"`
 	ScriptHash       string          `json:"script_hash,omitempty"`
 	Script           Script          `json:"script,omitempty"`
 }
@@ -76,4 +76,12 @@ func (c *Value) UnmarshalJSON(data []byte) error {
 type Point struct {
 	SlotNo     int    `json:"slot_no,omitempty"`
 	HeaderHash string `json:"header_hash,omitempty"`
+}
+
+type SpentAt struct {
+	SlotNo        int    `json:"slot_no,omitempty"`
+	HeaderHash    string `json:"header_hash,omitempty"`
+	TransactionId string `json:"transaction_id,omitempty"`
+	InputIndex    int    `json:"input_index,omitempty"`
+	Redeemer      string `json:"redeemer,omitempty"`
 }
