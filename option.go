@@ -26,7 +26,7 @@ package kugo
 import (
 	"time"
 
-	"github.com/SundaeSwap-finance/ogmigo"
+	"github.com/SundaeSwap-finance/ogmigo/v6"
 )
 
 // Options available to kugo client

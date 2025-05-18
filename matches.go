@@ -32,9 +32,9 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/SundaeSwap-finance/ogmigo"
-	"github.com/SundaeSwap-finance/ogmigo/ouroboros/chainsync"
-	"github.com/SundaeSwap-finance/ogmigo/ouroboros/shared"
+	"github.com/SundaeSwap-finance/ogmigo/v6"
+	"github.com/SundaeSwap-finance/ogmigo/v6/ouroboros/chainsync"
+	"github.com/SundaeSwap-finance/ogmigo/v6/ouroboros/shared"
 )
 
 type matchesOptions struct {

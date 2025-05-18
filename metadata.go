@@ -33,7 +33,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/SundaeSwap-finance/ogmigo"
+	"github.com/SundaeSwap-finance/ogmigo/v6"
 )
 
 type Metadatum struct {
