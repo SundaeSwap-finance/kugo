@@ -37,18 +37,20 @@ type Match struct {
 	Address          string          `json:"address,omitempty"`
 	DatumHash        string          `json:"datum_hash,omitempty"`
 	DatumType        string          `json:"datum_type,omitempty"`
-	Value            CompatibleValue `json:"value,omitempty"`
+	Value            Value           `json:"value,omitempty"`
 	CreatedAt        Point           `json:"created_at,omitempty"`
-	SpentAt          Point           `json:"spent_at,omitempty"`
+	SpentAt          SpentAt         `json:"spent_at,omitempty"`
+	ScriptHash       string          `json:"script_hash,omitempty"`
+	Script           Script          `json:"script,omitempty"`
 }
 
-type CompatibleValue shared.Value
+type Value shared.Value
 
-func (c *CompatibleValue) UnmarshalJSON(data []byte) error {
+func (c *Value) UnmarshalJSON(data []byte) error {
 	var v shared.Value
 	err := json.Unmarshal(data, &v)
 	if err == nil {
-		*c = CompatibleValue(v)
+		*c = Value(v)
 		return nil
 	}
 	type ValueV5 struct {
@@ -67,11 +69,19 @@ func (c *CompatibleValue) UnmarshalJSON(data []byte) error {
 	for asset, coins := range r5.Assets {
 		s.AddAsset(shared.Coin{AssetId: asset, Amount: coins})
 	}
-	*c = CompatibleValue(s)
+	*c = Value(s)
 	return nil
 }
 
 type Point struct {
 	SlotNo     int    `json:"slot_no,omitempty"`
 	HeaderHash string `json:"header_hash,omitempty"`
+}
+
+type SpentAt struct {
+	SlotNo        int    `json:"slot_no,omitempty"`
+	HeaderHash    string `json:"header_hash,omitempty"`
+	TransactionId string `json:"transaction_id,omitempty"`
+	InputIndex    int    `json:"input_index,omitempty"`
+	Redeemer      string `json:"redeemer,omitempty"`
 }
