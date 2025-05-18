@@ -2,14 +2,14 @@ package kugo
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 	"testing"
 
 	"github.com/tj/assert"
 )
 
 func Test_DecodeMatch(t *testing.T) {
-	bytes, err := ioutil.ReadFile("testdata/simple.json")
+	bytes, err := os.ReadFile("testdata/simple.json")
 	assert.Nil(t, err)
 
 	var match Match
@@ -34,7 +34,7 @@ func Test_DecodeMatch(t *testing.T) {
 }
 
 func Test_DecodeMatchScriptHash(t *testing.T) {
-	bytes, err := ioutil.ReadFile("testdata/script_hash.json")
+	bytes, err := os.ReadFile("testdata/script_hash.json")
 	assert.Nil(t, err)
 
 	var match Match
