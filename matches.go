@@ -141,15 +141,22 @@ func (o matchesOptions) apply(url *url.URL) {
 
 type MatchesFilter func(*matchesOptions)
 
-func (c *Client) Matches(ctx context.Context, filters ...MatchesFilter) (matches []Match, err error) {
+func (c *Client) Matches(
+	ctx context.Context,
+	filters ...MatchesFilter,
+) (matches []Match, err error) {
 	start := time.Now()
 	defer func() {
 		errStr := ""
 		if err != nil {
 			errStr = err.Error()
 		}
-		c.options.logger.Debug("Matches() finished",
-			ogmigo.KV("duration", time.Since(start).Round(time.Millisecond).String()),
+		c.options.logger.Debug(
+			"Matches() finished",
+			ogmigo.KV(
+				"duration",
+				time.Since(start).Round(time.Millisecond).String(),
+			),
 			ogmigo.KV("matched", fmt.Sprintf("%v", len(matches))),
 			ogmigo.KV("err", errStr),
 		)
@@ -157,7 +164,11 @@ func (c *Client) Matches(ctx context.Context, filters ...MatchesFilter) (matches
 
 	url, err := url.Parse(c.options.endpoint)
 	if err != nil {
-		return nil, fmt.Errorf("unable to parse endpoint %v: %w", c.options.endpoint, err)
+		return nil, fmt.Errorf(
+			"unable to parse endpoint %v: %w",
+			c.options.endpoint,
+			err,
+		)
 	}
 	url.Path = "/v1/matches"
 

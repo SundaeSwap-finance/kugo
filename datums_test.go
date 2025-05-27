@@ -39,7 +39,8 @@ func TestClient_Datum(t *testing.T) {
 			server := NewMockServer().AddDatum(
 				"34215ad90b1ade84f5b4fe3c0a16cb3afeae468210535e0305efd93931f35059",
 				"d87980",
-			).HTTP()
+			).
+				HTTP()
 			defer server.Close()
 
 			client := New(WithEndpoint(server.URL))

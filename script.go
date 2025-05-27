@@ -37,7 +37,6 @@ import (
 	"golang.org/x/crypto/blake2b"
 )
 
-
 type ScriptLanguage int
 
 const (
@@ -49,13 +48,13 @@ const (
 
 type Script struct {
 	Language ScriptLanguage
-	Script string
+	Script   string
 }
 
 func (s *Script) MarshalJSON() ([]byte, error) {
 	var r struct {
 		Language string
-		Script string
+		Script   string
 	}
 	switch s.Language {
 	case ScriptLanguageNative:
@@ -74,7 +73,7 @@ func (s *Script) MarshalJSON() ([]byte, error) {
 func (s *Script) UnmarshalJSON(data []byte) error {
 	var r struct {
 		Language string
-		Script string
+		Script   string
 	}
 	err := json.Unmarshal(data, &r)
 	if err != nil {
@@ -114,22 +113,33 @@ func (s Script) Hash() []byte {
 	return hashBytes[:]
 }
 
-func (c *Client) Script(ctx context.Context, scriptHash string) (script *Script, err error) {
+func (c *Client) Script(
+	ctx context.Context,
+	scriptHash string,
+) (script *Script, err error) {
 	start := time.Now()
 	defer func() {
 		errStr := ""
 		if err != nil {
 			errStr = err.Error()
 		}
-		c.options.logger.Info("Script() finished",
-			ogmigo.KV("duration", time.Since(start).Round(time.Millisecond).String()),
+		c.options.logger.Info(
+			"Script() finished",
+			ogmigo.KV(
+				"duration",
+				time.Since(start).Round(time.Millisecond).String(),
+			),
 			ogmigo.KV("err", errStr),
 		)
 	}()
 
 	url, err := url.Parse(c.options.endpoint)
 	if err != nil {
-		return nil, fmt.Errorf("unable to parse endpoint %v: %w", c.options.endpoint, err)
+		return nil, fmt.Errorf(
+			"unable to parse endpoint %v: %w",
+			c.options.endpoint,
+			err,
+		)
 	}
 	url.Path = "/v1/script/" + scriptHash
 
