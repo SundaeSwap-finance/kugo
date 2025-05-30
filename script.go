@@ -98,7 +98,15 @@ func (s *Script) UnmarshalJSON(data []byte) error {
 
 func (s Script) Hash() []byte {
 	scriptBytes, _ := hex.DecodeString(s.Script)
-	blake, _ := blake2b.New(224/8, nil)
+	blake, err := blake2b.New(224/8, nil)
+	if err != nil {
+		panic(
+			fmt.Sprintf(
+				"unexpected error generating empty blake2b hash: %s",
+				err,
+			),
+		)
+	}
 	switch s.Language {
 	case ScriptLanguageNative:
 		blake.Write([]byte{0x00})
