@@ -53,6 +53,9 @@ type matchesOptions struct {
 }
 
 func (o matchesOptions) apply(url *url.URL) {
+	if url == nil {
+		return
+	}
 	qs := ""
 	// Handle the mutually exclusive spent/unspent filters
 	if o.spent && !o.unspent {
@@ -164,6 +167,9 @@ func (c *Client) Matches(ctx context.Context, filters ...MatchesFilter) (matches
 	o := matchesOptions{}
 	for _, f := range filters {
 		f(&o)
+	}
+	if url == nil {
+		return nil, fmt.Errorf("nil url returned for endpoint: %v", c.options.endpoint)
 	}
 	o.apply(url)
 
