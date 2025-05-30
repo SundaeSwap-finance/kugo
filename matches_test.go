@@ -46,14 +46,22 @@ func Test_Matches(t *testing.T) {
 	server := NewMockServer().AddMatches(
 		"addr_test1qpluezahtqdtwg4f7qewdvjvz806hsatqwr4u04yzcrk2m7pucvj7jyhq97rca9m0wul2fu3qnsayxvqdwlda8wngurqgyfepe",
 		match,
-	).HTTP()
+	).
+		HTTP()
 	defer server.Close()
 
 	c := New(WithEndpoint(server.URL))
-	matches, err := c.Matches(context.Background(),
+	matches, err := c.Matches(
+		context.Background(),
 		OnlyUnspent(),
-		AssetID(shared.AssetID("4fc16c94d066e949e771c5581235f8090ad6aaffaf373a426445ca51.73636f6f70209a0a")),
-		Pattern("addr_test1qpluezahtqdtwg4f7qewdvjvz806hsatqwr4u04yzcrk2m7pucvj7jyhq97rca9m0wul2fu3qnsayxvqdwlda8wngurqgyfepe"),
+		AssetID(
+			shared.AssetID(
+				"4fc16c94d066e949e771c5581235f8090ad6aaffaf373a426445ca51.73636f6f70209a0a",
+			),
+		),
+		Pattern(
+			"addr_test1qpluezahtqdtwg4f7qewdvjvz806hsatqwr4u04yzcrk2m7pucvj7jyhq97rca9m0wul2fu3qnsayxvqdwlda8wngurqgyfepe",
+		),
 	)
 	assert.Nil(t, err)
 	assert.NotZero(t, len(matches))
@@ -116,23 +124,39 @@ func Test_Options(t *testing.T) {
 			expected: base + "/www",
 		},
 		{
-			label:    "mixed",
-			options:  []MatchesFilter{Overlapping(123), AssetID(shared.AssetID("abc.xyz")), Pattern("www")},
+			label: "mixed",
+			options: []MatchesFilter{
+				Overlapping(123),
+				AssetID(shared.AssetID("abc.xyz")),
+				Pattern("www"),
+			},
 			expected: base + "/www?created_before=123&spent_after=123&policy_id=abc&asset_name=xyz",
 		},
 		{
-			label:    "mixed 2",
-			options:  []MatchesFilter{Overlapping(123), PolicyID("abc"), Pattern("www")},
+			label: "mixed 2",
+			options: []MatchesFilter{
+				Overlapping(123),
+				PolicyID("abc"),
+				Pattern("www"),
+			},
 			expected: base + "/www?created_before=123&spent_after=123&policy_id=abc",
 		},
 		{
-			label:    "mixed 3",
-			options:  []MatchesFilter{Overlapping(123), TxOut(chainsync.NewTxID("xyz", 1)), Pattern("www")},
+			label: "mixed 3",
+			options: []MatchesFilter{
+				Overlapping(123),
+				TxOut(chainsync.NewTxID("xyz", 1)),
+				Pattern("www"),
+			},
 			expected: base + "/www?created_before=123&spent_after=123&transaction_id=xyz&output_index=1",
 		},
 		{
-			label:    "mixed 4",
-			options:  []MatchesFilter{Overlapping(123), Transaction("xyz"), Pattern("www")},
+			label: "mixed 4",
+			options: []MatchesFilter{
+				Overlapping(123),
+				Transaction("xyz"),
+				Pattern("www"),
+			},
 			expected: base + "/www?created_before=123&spent_after=123&transaction_id=xyz",
 		},
 	}

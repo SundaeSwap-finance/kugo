@@ -51,15 +51,22 @@ type CheckpointsFilter struct {
 	after  func(points []Point) []Point
 }
 
-func (c *Client) Checkpoints(ctx context.Context, filters ...CheckpointsFilter) (points []Point, err error) {
+func (c *Client) Checkpoints(
+	ctx context.Context,
+	filters ...CheckpointsFilter,
+) (points []Point, err error) {
 	start := time.Now()
 	defer func() {
 		errStr := ""
 		if err != nil {
 			errStr = err.Error()
 		}
-		c.options.logger.Info("Checkpoints() finished",
-			ogmigo.KV("duration", time.Since(start).Round(time.Millisecond).String()),
+		c.options.logger.Info(
+			"Checkpoints() finished",
+			ogmigo.KV(
+				"duration",
+				time.Since(start).Round(time.Millisecond).String(),
+			),
 			ogmigo.KV("err", errStr),
 		)
 	}()
@@ -104,13 +111,21 @@ func (c *Client) Checkpoints(ctx context.Context, filters ...CheckpointsFilter) 
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("got unexpected response: %v: %v", resp.StatusCode, string(body))
+		return nil, fmt.Errorf(
+			"got unexpected response: %v: %v",
+			resp.StatusCode,
+			string(body),
+		)
 	}
 
 	if o.singular {
 		var point Point
 		if err := json.Unmarshal(body, &point); err != nil {
-			return nil, fmt.Errorf("error parsing response %v: %w", string(body), err)
+			return nil, fmt.Errorf(
+				"error parsing response %v: %w",
+				string(body),
+				err,
+			)
 		}
 		points = []Point{point}
 	} else {

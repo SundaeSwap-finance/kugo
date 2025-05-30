@@ -41,14 +41,22 @@ func (c *Client) Patterns(ctx context.Context) (matches []string, err error) {
 		if err != nil {
 			errStr = err.Error()
 		}
-		c.options.logger.Info("Patterns() finished",
-			ogmigo.KV("duration", time.Since(start).Round(time.Millisecond).String()),
+		c.options.logger.Info(
+			"Patterns() finished",
+			ogmigo.KV(
+				"duration",
+				time.Since(start).Round(time.Millisecond).String(),
+			),
 			ogmigo.KV("matched", fmt.Sprintf("%v", len(matches))),
 			ogmigo.KV("err", errStr),
 		)
 	}()
 
-	req, err := http.NewRequest("GET", fmt.Sprintf("%v/v1/patterns", c.options.endpoint), nil)
+	req, err := http.NewRequest(
+		"GET",
+		fmt.Sprintf("%v/v1/patterns", c.options.endpoint),
+		nil,
+	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build request: %w", err)
 	}
@@ -75,7 +83,11 @@ func (c *Client) Patterns(ctx context.Context) (matches []string, err error) {
 
 	matches = []string{}
 	if err := json.Unmarshal(body, &matches); err != nil {
-		return nil, fmt.Errorf("error parsing response %v: %w", string(body), err)
+		return nil, fmt.Errorf(
+			"error parsing response %v: %w",
+			string(body),
+			err,
+		)
 	}
 	return matches, nil
 }
