@@ -42,22 +42,34 @@ type Metadatum struct {
 	Schema json.RawMessage
 }
 
-func (c *Client) Metadata(ctx context.Context, slotNo int, txId string) (metadatum []Metadatum, err error) {
+func (c *Client) Metadata(
+	ctx context.Context,
+	slotNo int,
+	txId string,
+) (metadatum []Metadatum, err error) {
 	start := time.Now()
 	defer func() {
 		errStr := ""
 		if err != nil {
 			errStr = err.Error()
 		}
-		c.options.logger.Info("Metadata() finished",
-			ogmigo.KV("duration", time.Since(start).Round(time.Millisecond).String()),
+		c.options.logger.Info(
+			"Metadata() finished",
+			ogmigo.KV(
+				"duration",
+				time.Since(start).Round(time.Millisecond).String(),
+			),
 			ogmigo.KV("err", errStr),
 		)
 	}()
 
 	url, err := url.Parse(c.options.endpoint)
 	if err != nil {
-		return nil, fmt.Errorf("unable to parse endpoint %v: %w", c.options.endpoint, err)
+		return nil, fmt.Errorf(
+			"unable to parse endpoint %v: %w",
+			c.options.endpoint,
+			err,
+		)
 	}
 	url.Path = "/v1/metadata/" + strconv.Itoa(slotNo)
 

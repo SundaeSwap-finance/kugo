@@ -35,22 +35,33 @@ import (
 	"github.com/SundaeSwap-finance/ogmigo/v6"
 )
 
-func (c *Client) Datum(ctx context.Context, datumHash string) (datum string, err error) {
+func (c *Client) Datum(
+	ctx context.Context,
+	datumHash string,
+) (datum string, err error) {
 	start := time.Now()
 	defer func() {
 		errStr := ""
 		if err != nil {
 			errStr = err.Error()
 		}
-		c.options.logger.Info("Datum() finished",
-			ogmigo.KV("duration", time.Since(start).Round(time.Millisecond).String()),
+		c.options.logger.Info(
+			"Datum() finished",
+			ogmigo.KV(
+				"duration",
+				time.Since(start).Round(time.Millisecond).String(),
+			),
 			ogmigo.KV("err", errStr),
 		)
 	}()
 
 	url, err := url.Parse(c.options.endpoint)
 	if err != nil {
-		return "", fmt.Errorf("unable to parse endpoint %v: %w", c.options.endpoint, err)
+		return "", fmt.Errorf(
+			"unable to parse endpoint %v: %w",
+			c.options.endpoint,
+			err,
+		)
 	}
 	url.Path = "/v1/datums/" + datumHash
 

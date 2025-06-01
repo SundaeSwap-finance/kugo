@@ -31,17 +31,17 @@ import (
 )
 
 type Match struct {
-	TransactionIndex int             `json:"transaction_index,omitempty"`
-	TransactionID    string          `json:"transaction_id,omitempty"`
-	OutputIndex      int             `json:"output_index,omitempty"`
-	Address          string          `json:"address,omitempty"`
-	DatumHash        string          `json:"datum_hash,omitempty"`
-	DatumType        string          `json:"datum_type,omitempty"`
-	Value            Value           `json:"value,omitempty"`
-	CreatedAt        Point           `json:"created_at,omitempty"`
-	SpentAt          SpentAt         `json:"spent_at,omitempty"`
-	ScriptHash       string          `json:"script_hash,omitempty"`
-	Script           Script          `json:"script,omitempty"`
+	TransactionIndex int     `json:"transaction_index,omitempty"`
+	TransactionID    string  `json:"transaction_id,omitempty"`
+	OutputIndex      int     `json:"output_index,omitempty"`
+	Address          string  `json:"address,omitempty"`
+	DatumHash        string  `json:"datum_hash,omitempty"`
+	DatumType        string  `json:"datum_type,omitempty"`
+	Value            Value   `json:"value,omitempty"`
+	CreatedAt        Point   `json:"created_at,omitempty"`
+	SpentAt          SpentAt `json:"spent_at,omitempty"`
+	ScriptHash       string  `json:"script_hash,omitempty"`
+	Script           Script  `json:"script,omitempty"`
 }
 
 type Value shared.Value
