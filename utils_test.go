@@ -116,8 +116,8 @@ func writeSuccess(w http.ResponseWriter, body interface{}) {
 func (m *MockKugoServer) HTTP() *httptest.Server {
 	return httptest.NewServer(
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if strings.HasPrefix(r.URL.Path, "/v1/script/") {
-				response, ok := m.scripts[strings.TrimPrefix(r.URL.Path, "/v1/script/")]
+			if strings.HasPrefix(r.URL.Path, "/v1/scripts/") {
+				response, ok := m.scripts[strings.TrimPrefix(r.URL.Path, "/v1/scripts/")]
 				if !ok {
 					// If a script isn't found, Kugo responds with `null` instead of an error.
 					writeSuccess(w, json.RawMessage("null"))
