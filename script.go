@@ -149,7 +149,7 @@ func (c *Client) Script(
 			err,
 		)
 	}
-	url.Path = "/v1/script/" + scriptHash
+	url.Path = "/v1/scripts/" + scriptHash
 
 	req, err := http.NewRequest("GET", url.String(), nil)
 	if err != nil {
