@@ -5,7 +5,7 @@ go 1.23.0
 require (
 	github.com/SundaeSwap-finance/ogmigo/v6 v6.0.2
 	github.com/tj/assert v0.0.3
-	github.com/urfave/cli/v2 v2.27.6
+	github.com/urfave/cli/v2 v2.27.7
 	golang.org/x/crypto v0.39.0
 )
 
@@ -13,7 +13,7 @@ require (
 	github.com/aws/aws-sdk-go v1.55.6 // indirect
 	github.com/btcsuite/btcutil v1.0.2 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
-	github.com/cpuguy83/go-md2man/v2 v2.0.5 // indirect
+	github.com/cpuguy83/go-md2man/v2 v2.0.7 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fxamacker/cbor/v2 v2.7.0 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
