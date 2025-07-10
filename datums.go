@@ -26,6 +26,7 @@ package kugo
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -81,7 +82,7 @@ func (c *Client) Datum(
 		return "", fmt.Errorf("unable to fetch datum: %w", err)
 	}
 	if resp == nil {
-		return "", fmt.Errorf("failed with a nil response")
+		return "", errors.New("failed with a nil response")
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)

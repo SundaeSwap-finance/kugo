@@ -26,6 +26,7 @@ package kugo
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -202,7 +203,7 @@ func (c *Client) Matches(
 		return nil, fmt.Errorf("unable to fetch matches: %w", err)
 	}
 	if resp == nil {
-		return nil, fmt.Errorf("failed with a nil response")
+		return nil, errors.New("failed with a nil response")
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
@@ -291,16 +292,19 @@ func CreatedBefore(slot uint64) MatchesFilter {
 		o.created_before = slot
 	}
 }
+
 func CreatedAfter(slot uint64) MatchesFilter {
 	return func(o *matchesOptions) {
 		o.created_after = slot
 	}
 }
+
 func SpentBefore(slot uint64) MatchesFilter {
 	return func(o *matchesOptions) {
 		o.spent_before = slot
 	}
 }
+
 func SpentAfter(slot uint64) MatchesFilter {
 	return func(o *matchesOptions) {
 		o.spent_after = slot
