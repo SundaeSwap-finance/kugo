@@ -77,7 +77,7 @@ func (c *Client) Metadata(
 		url.Path += "?transaction_id=" + txId
 	}
 
-	req, err := http.NewRequest("GET", url.String(), nil)
+	req, err := http.NewRequest(http.MethodGet, url.String(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("unable to build request: %w", err)
 	}

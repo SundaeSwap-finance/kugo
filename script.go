@@ -89,7 +89,7 @@ func (s *Script) UnmarshalJSON(data []byte) error {
 	case "plutus:v3":
 		s.Language = ScriptLanguagePlutusV3
 	default:
-		return fmt.Errorf("Unknown script language version: '%v'", r.Language)
+		return fmt.Errorf("unknown script language version: '%v'", r.Language)
 	}
 	s.Script = r.Script
 	return nil
@@ -151,7 +151,7 @@ func (c *Client) Script(
 	}
 	url.Path = "/v1/scripts/" + scriptHash
 
-	req, err := http.NewRequest("GET", url.String(), nil)
+	req, err := http.NewRequest(http.MethodGet, url.String(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("unable to build request: %w", err)
 	}

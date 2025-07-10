@@ -186,7 +186,7 @@ func (c *Client) Matches(
 
 	c.logger.Debug("finding matches", ogmigo.KV("url", url.String()))
 
-	req, err := http.NewRequest("GET", url.String(), nil)
+	req, err := http.NewRequest(http.MethodGet, url.String(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("unable to build request: %w", err)
 	}
