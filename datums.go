@@ -66,7 +66,7 @@ func (c *Client) Datum(
 	}
 	url.Path = "/v1/datums/" + datumHash
 
-	req, err := http.NewRequest("GET", url.String(), nil)
+	req, err := http.NewRequest(http.MethodGet, url.String(), nil)
 	if err != nil {
 		return "", fmt.Errorf("unable to build request: %w", err)
 	}

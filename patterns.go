@@ -54,7 +54,7 @@ func (c *Client) Patterns(ctx context.Context) (matches []string, err error) {
 	}()
 
 	req, err := http.NewRequest(
-		"GET",
+		http.MethodGet,
 		fmt.Sprintf("%v/v1/patterns", c.options.endpoint),
 		nil,
 	)

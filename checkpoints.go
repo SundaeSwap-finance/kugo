@@ -87,7 +87,7 @@ func (c *Client) Checkpoints(
 	}
 	o.apply(endpoint)
 
-	req, err := http.NewRequest("GET", endpoint.String(), nil)
+	req, err := http.NewRequest(http.MethodGet, endpoint.String(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build request: %w", err)
 	}
