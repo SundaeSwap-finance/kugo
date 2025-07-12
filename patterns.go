@@ -26,6 +26,7 @@ package kugo
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -72,7 +73,7 @@ func (c *Client) Patterns(ctx context.Context) (matches []string, err error) {
 		return nil, fmt.Errorf("failed to retrieve patterns: %w", err)
 	}
 	if resp == nil {
-		return nil, fmt.Errorf("failed with a nil response")
+		return nil, errors.New("failed with a nil response")
 	}
 	defer resp.Body.Close()
 

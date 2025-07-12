@@ -26,6 +26,7 @@ package kugo
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -93,7 +94,7 @@ func (c *Client) Metadata(
 		return nil, fmt.Errorf("unable to fetch metadata: %w", err)
 	}
 	if resp == nil {
-		return nil, fmt.Errorf("failed with a nil response")
+		return nil, errors.New("failed with a nil response")
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
