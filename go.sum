@@ -1,3 +1,5 @@
+github.com/SundaeSwap-finance/ogmigo v0.10.0 h1:vADmZtMZna0dBHK4FEWMpjP3sh0Xla6Imr8MdX4h/6Y=
+github.com/SundaeSwap-finance/ogmigo v0.10.0/go.mod h1:snL4kMjA9fBKQek2Dt4cfV9yGBVxGSstFL6tg4ckoNA=
 github.com/SundaeSwap-finance/ogmigo/v6 v6.1.0 h1:YhlwRzOvQMQyRyRQEYXQrHqc7nTg7rQPJb86DoSfRCw=
 github.com/SundaeSwap-finance/ogmigo/v6 v6.1.0/go.mod h1:FgU9nAQNyi+ApWqXB+DKAcbPISl/2gFZGJklqWmT9qY=
 github.com/aead/siphash v1.0.1/go.mod h1:Nywa3cDsYNNK3gaciGTWPwHt0wlpNV15vwmswBAUSII=

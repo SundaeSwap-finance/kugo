@@ -29,8 +29,8 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/SundaeSwap-finance/ogmigo/v6/ouroboros/chainsync"
-	"github.com/SundaeSwap-finance/ogmigo/v6/ouroboros/shared"
+	"github.com/SundaeSwap-finance/ogmigo/ouroboros/chainsync"
+	"github.com/SundaeSwap-finance/ogmigo/ouroboros/shared"
 
 	"github.com/tj/assert"
 )
