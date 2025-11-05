@@ -38,10 +38,10 @@ type Match struct {
 	DatumHash        string  `json:"datum_hash,omitempty"`
 	DatumType        string  `json:"datum_type,omitempty"`
 	Value            Value   `json:"value,omitempty"`
-	CreatedAt        Point   `json:"created_at,omitempty"`
-	SpentAt          SpentAt `json:"spent_at,omitempty"`
+	CreatedAt        Point   `json:"created_at"`
+	SpentAt          SpentAt `json:"spent_at"`
 	ScriptHash       string  `json:"script_hash,omitempty"`
-	Script           Script  `json:"script,omitempty"`
+	Script           Script  `json:"script"`
 }
 
 type Value shared.Value
@@ -54,7 +54,7 @@ func (c *Value) UnmarshalJSON(data []byte) error {
 		return nil
 	}
 	type ValueV5 struct {
-		Coins  num.Int                    `json:"coins,omitempty"`
+		Coins  num.Int                    `json:"coins"`
 		Assets map[shared.AssetID]num.Int `json:"assets"`
 	}
 	var r5 ValueV5
