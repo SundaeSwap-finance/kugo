@@ -191,6 +191,9 @@ func (c *Client) Matches(
 	if err != nil {
 		return nil, fmt.Errorf("unable to build request: %w", err)
 	}
+	for name, value := range c.options.headers {
+		req.Header.Add(name, value)
+	}
 
 	req.Close = true
 	req = req.WithContext(ctx)

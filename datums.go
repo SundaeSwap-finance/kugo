@@ -70,6 +70,9 @@ func (c *Client) Datum(
 	if err != nil {
 		return "", fmt.Errorf("unable to build request: %w", err)
 	}
+	for name, value := range c.options.headers {
+		req.Header.Add(name, value)
+	}
 
 	req.Close = true
 	req = req.WithContext(ctx)
