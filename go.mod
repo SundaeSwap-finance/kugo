@@ -3,7 +3,7 @@ module github.com/SundaeSwap-finance/kugo
 go 1.24.0
 
 require (
-	github.com/SundaeSwap-finance/ogmigo/v6 v6.2.0
+	github.com/SundaeSwap-finance/ogmigo/v6 v6.2.1
 	github.com/tj/assert v0.0.3
 	github.com/urfave/cli/v2 v2.27.7
 	golang.org/x/crypto v0.48.0
@@ -12,7 +12,7 @@ require (
 require (
 	github.com/aws/aws-sdk-go v1.55.6 // indirect
 	github.com/btcsuite/btcutil v1.0.2 // indirect
-	github.com/buger/jsonparser v1.1.1 // indirect
+	github.com/buger/jsonparser v1.1.2 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.7 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fxamacker/cbor/v2 v2.7.0 // indirect
