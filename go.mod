@@ -1,12 +1,12 @@
 module github.com/SundaeSwap-finance/kugo
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/SundaeSwap-finance/ogmigo/v6 v6.2.1
 	github.com/tj/assert v0.0.3
 	github.com/urfave/cli/v2 v2.27.7
-	golang.org/x/crypto v0.48.0
+	golang.org/x/crypto v0.50.0
 )
 
 require (
@@ -25,6 +25,6 @@ require (
 	github.com/x448/float16 v0.8.4 // indirect
 	github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1 // indirect
 	golang.org/x/sync v0.10.0 // indirect
-	golang.org/x/sys v0.41.0 // indirect
+	golang.org/x/sys v0.43.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
