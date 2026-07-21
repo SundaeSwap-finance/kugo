@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v6.0.1 https://github.com/actions/checkout/releases/tag/v6.0.1
       - uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6.2.0 https://github.com/actions/setup-go/releases/tag/v6.2.0
         with:
-          go-version: 1.25.x
+          go-version: 1.26.x
       - name: install nilaway
         run: go install go.uber.org/nilaway/cmd/nilaway@latest
       - name: run nilaway
