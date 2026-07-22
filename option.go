@@ -32,6 +32,7 @@ import (
 // Options available to kugo client
 type Options struct {
 	endpoint string
+	headers  map[string]string
 	timeout  time.Duration
 	logger   ogmigo.Logger
 }
@@ -57,6 +58,13 @@ func WithTimeout(timeout time.Duration) Option {
 func WithEndpoint(endpoint string) Option {
 	return func(opts *Options) {
 		opts.endpoint = endpoint
+	}
+}
+
+// WithHeader allows extra header to be attached
+func WithHeader(name string, value string) Option {
+	return func(opts *Options) {
+		opts.headers[name] = value
 	}
 }
 
