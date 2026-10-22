@@ -1,6 +1,6 @@
 module github.com/SundaeSwap-finance/kugo
 
-go 1.26.0
+go 1.26.10
 
 require (
 	github.com/SundaeSwap-finance/ogmigo/v6 v6.2.1
