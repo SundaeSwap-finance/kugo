@@ -3,7 +3,7 @@ module github.com/SundaeSwap-finance/kugo
 go 1.26.10
 
 require (
-	github.com/SundaeSwap-finance/ogmigo/v6 v6.2.1
+	github.com/SundaeSwap-finance/ogmigo/v7 v7.0.1
 	github.com/tj/assert v0.0.3
 	github.com/urfave/cli/v2 v2.27.7
 	golang.org/x/crypto v0.58.0

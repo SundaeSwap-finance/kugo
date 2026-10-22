@@ -26,8 +26,8 @@ package kugo
 import (
 	"encoding/json"
 
-	"github.com/SundaeSwap-finance/ogmigo/v6/ouroboros/chainsync/num"
-	"github.com/SundaeSwap-finance/ogmigo/v6/ouroboros/shared"
+	"github.com/SundaeSwap-finance/ogmigo/v7/ouroboros/chainsync/num"
+	"github.com/SundaeSwap-finance/ogmigo/v7/ouroboros/shared"
 )
 
 type Match struct {

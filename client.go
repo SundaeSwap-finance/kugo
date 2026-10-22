@@ -23,7 +23,7 @@
 
 package kugo
 
-import "github.com/SundaeSwap-finance/ogmigo/v6"
+import "github.com/SundaeSwap-finance/ogmigo/v7"
 
 type Client struct {
 	logger  ogmigo.Logger
