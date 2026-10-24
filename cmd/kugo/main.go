@@ -32,7 +32,7 @@ import (
 	"os"
 
 	"github.com/SundaeSwap-finance/kugo"
-	"github.com/SundaeSwap-finance/ogmigo/v6/ouroboros/shared"
+	"github.com/SundaeSwap-finance/ogmigo/v7/ouroboros/shared"
 	"github.com/urfave/cli/v2"
 )
 
